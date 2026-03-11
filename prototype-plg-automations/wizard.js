@@ -10,80 +10,50 @@ document.addEventListener('DOMContentLoaded', () => {
             purpose: null,
             orgSize: null
         },
+        integrations: {
+            github: true,
+            slack: false,
+            jira: false
+        },
         selectedUseCases: [],
+        useCaseTriggers: {},
         selectedRepos: [],
-        runtime: null,
         modelOption: null,
         apiKey: null,
         businessEmail: null,
-        setupComplete: false
+        setupComplete: false,
+        customUseCases: []
     };
 
     // Use case descriptions data with documentation URLs
     const useCaseData = {
         'prd-refinement': {
             name: 'PRD Refinement',
-            trigger: 'openhands:refine',
             emoji: '📝',
-            triggerType: 'issue',
+            slashCommand: '/prd-refinement',
             docUrl: 'https://docs.openhands.dev/workflows/prd-refinement',
             description: 'Automatically analyze and refine Product Requirements Documents by identifying gaps, suggesting improvements, and adding technical specifications.'
         },
-        'spec-generator': {
-            name: 'Spec Generator',
-            trigger: 'openhands:spec',
-            emoji: '📋',
-            triggerType: 'issue',
-            docUrl: 'https://docs.openhands.dev/workflows/spec-generator',
-            description: 'Generate detailed technical specifications from high-level requirements, including architecture diagrams, API contracts, and implementation plans.'
+        'task-decomposition': {
+            name: 'Task Decomposition',
+            emoji: '🔀',
+            slashCommand: '/decompose',
+            docUrl: 'https://docs.openhands.dev/workflows/task-decomposition',
+            description: 'Break down complex issues into smaller, actionable tasks. Perfect for taking high-level features and creating implementation subtasks.'
         },
-        'refactor': {
-            name: 'Refactor',
-            trigger: 'openhands:refactor',
-            emoji: '🔄',
-            triggerType: 'pr',
-            docUrl: 'https://docs.openhands.dev/workflows/refactor',
-            description: 'Intelligently refactor code in pull requests to improve code quality, readability, and maintainability while preserving functionality.'
+        'pr-summary': {
+            name: 'Weekly PR Summary',
+            emoji: '📊',
+            slashCommand: '/pr-summary',
+            docUrl: 'https://docs.openhands.dev/workflows/pr-summary',
+            description: 'Get a comprehensive summary of all PRs, reviews, and merge activity posted to your Slack channel on a regular schedule.'
         },
-        'dependency-upgrades': {
-            name: 'Dependency Upgrades',
-            trigger: 'openhands:upgrade',
-            emoji: '📦',
-            triggerType: 'issue',
-            docUrl: 'https://docs.openhands.dev/workflows/dependency-upgrades',
-            description: 'Automatically upgrade project dependencies, handle breaking changes, and ensure compatibility across your codebase.'
-        },
-        'bug-fixer': {
-            name: 'Bug Fixer',
-            trigger: 'bug',
-            emoji: '🐛',
-            triggerType: 'issue',
-            docUrl: 'https://docs.openhands.dev/workflows/bug-fixer',
-            description: 'Automatically investigate and fix bugs based on issue descriptions, error logs, and reproduction steps.'
-        },
-        'pr-review': {
-            name: 'PR Review',
-            trigger: 'openhands:review',
+        'code-review': {
+            name: 'Code Review',
             emoji: '👀',
-            triggerType: 'pr',
-            docUrl: 'https://docs.openhands.dev/workflows/pr-review',
+            slashCommand: '/pr-review',
+            docUrl: 'https://docs.openhands.dev/workflows/code-review',
             description: 'Perform comprehensive code reviews on pull requests, identifying issues, suggesting improvements, and ensuring code quality standards.'
-        },
-        'vulnerability-remediation': {
-            name: 'Vulnerability Remediation',
-            trigger: 'openhands:remediate',
-            emoji: '🔒',
-            triggerType: 'issue',
-            docUrl: 'https://docs.openhands.dev/workflows/vulnerability-remediation',
-            description: 'Automatically fix security vulnerabilities identified by security scanners and dependency audits.'
-        },
-        'ci-failure-fixer': {
-            name: 'CI Failure Fixer',
-            trigger: 'automatic',
-            emoji: '🔧',
-            triggerType: 'ci',
-            docUrl: 'https://docs.openhands.dev/workflows/ci-failure-fixer',
-            description: 'Automatically analyze and fix CI pipeline failures, including test failures, linting errors, and build issues.'
         }
     };
 
@@ -158,22 +128,25 @@ document.addEventListener('DOMContentLoaded', () => {
             // Show "not setup" view
             notSetupView.style.display = 'block';
             cloudView.style.display = 'none';
-            localView.style.display = 'none';
-        } else if (state.runtime === 'cloud') {
+            if (localView) localView.style.display = 'none';
+        } else {
+            // Always show sample dashboard metrics (Runtime step removed per PRD)
             notSetupView.style.display = 'none';
             cloudView.style.display = 'block';
-            localView.style.display = 'none';
+            if (localView) localView.style.display = 'none';
             populateMonitoringData();
-        } else {
-            notSetupView.style.display = 'none';
-            cloudView.style.display = 'none';
-            localView.style.display = 'block';
         }
     }
 
     // Navigation functions for wizard steps
     function goToStep(stepNumber) {
-        if (stepNumber < 1 || stepNumber > 7) return;
+        // Handle going to setup complete page
+        if (stepNumber === 'complete' || stepNumber > 6) {
+            showSetupComplete();
+            return;
+        }
+        
+        if (stepNumber < 1 || stepNumber > 6) return;
         
         // Make sure we're in wizard view
         if (currentView !== 'wizard') {
@@ -200,11 +173,91 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById(`step-${stepNumber}`).classList.add('active');
         
         // Special handling for certain steps
-        if (stepNumber === 4) {
+        if (stepNumber === 5) {
             populateRepoList();
         }
-        if (stepNumber === 7) {
-            startInstallation();
+    }
+    
+    // Show the Setup Complete page
+    function showSetupComplete() {
+        state.setupComplete = true;
+        
+        // Mark all steps as completed
+        progressSteps.forEach(step => {
+            step.classList.remove('active');
+            step.classList.add('completed');
+        });
+        
+        // Hide all wizard steps and show setup complete
+        wizardSteps.forEach(step => {
+            step.classList.remove('active');
+        });
+        document.getElementById('setup-complete').classList.add('active');
+        
+        // Populate the tutorial cards with selected use cases
+        populateTutorialCards();
+    }
+    
+    // Populate tutorial cards with selected use cases
+    function populateTutorialCards() {
+        const tutorialCards = document.getElementById('tutorial-cards');
+        tutorialCards.innerHTML = '';
+        
+        // Add built-in use cases
+        state.selectedUseCases.forEach(usecaseId => {
+            const data = useCaseData[usecaseId];
+            if (!data) return;
+            
+            const card = document.createElement('div');
+            card.className = 'tutorial-card';
+            card.innerHTML = `
+                <h3><span>${data.emoji}</span> ${data.name}</h3>
+                <p class="tutorial-description">${data.description}</p>
+                <div class="doc-link-container">
+                    <div class="doc-link-label">📚 Documentation Link (share with your team)</div>
+                    <div class="doc-link-box">
+                        <a href="${data.docUrl}" target="_blank" class="doc-link">${data.docUrl}</a>
+                        <button class="copy-btn" onclick="copyToClipboard('${data.docUrl}', this)">Copy</button>
+                    </div>
+                </div>
+                <div class="trigger-info">
+                    <strong>Slash Command:</strong> <code>${data.slashCommand}</code>
+                </div>
+            `;
+            tutorialCards.appendChild(card);
+        });
+        
+        // Add custom use cases
+        if (window.customUseCases) {
+            window.customUseCases.forEach(useCase => {
+                // Check if this custom use case is selected
+                const useCaseEl = document.querySelector(`.use-case-item[data-usecase="${useCase.id}"]`);
+                if (!useCaseEl || !useCaseEl.classList.contains('selected')) return;
+                
+                let triggerInfo = '';
+                if (useCase.triggerType === 'schedule') {
+                    const dayLabel = useCase.scheduleDay === 'daily' ? 'Daily' : `Every ${useCase.scheduleDay}`;
+                    triggerInfo = `<strong>Schedule:</strong> ${dayLabel} at ${useCase.scheduleTime}`;
+                } else {
+                    const platformLabel = useCase.triggerPlatform.charAt(0).toUpperCase() + useCase.triggerPlatform.slice(1);
+                    const eventLabel = useCase.triggerEvent.replace(/-/g, ' ');
+                    triggerInfo = `<strong>Trigger:</strong> ${platformLabel} - ${eventLabel}`;
+                    if (useCase.triggerLabel) {
+                        triggerInfo += ` '${useCase.triggerLabel}'`;
+                    }
+                }
+                
+                const card = document.createElement('div');
+                card.className = 'tutorial-card custom';
+                card.innerHTML = `
+                    <h3><span>🔧</span> ${useCase.name}</h3>
+                    <p class="tutorial-description">${useCase.actionType === 'plugin' ? 'Plugin: ' + useCase.pluginPath : 'Custom prompt automation'}</p>
+                    <div class="trigger-info">
+                        ${triggerInfo}
+                    </div>
+                `;
+                tutorialCards.appendChild(card);
+            });
         }
     }
 
@@ -216,11 +269,12 @@ document.addEventListener('DOMContentLoaded', () => {
             case 2:
                 return state.profile.role && state.profile.purpose && state.profile.orgSize;
             case 3:
-                return state.selectedUseCases.length > 0;
+                // Integrations step - always valid (user can skip connecting Slack/Jira)
+                return true;
             case 4:
-                return state.selectedRepos.length > 0;
+                return state.selectedUseCases.length > 0;
             case 5:
-                return state.runtime !== null;
+                return state.selectedRepos.length > 0;
             case 6:
                 if (state.modelOption === 'byok') {
                     const provider = document.getElementById('provider-select').value;
@@ -283,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Step 3: Use case selection handlers
+    // Step 4: Use case selection handlers
     const useCaseItems = document.querySelectorAll('.use-case-item');
     const detailsPlaceholder = document.querySelector('.details-placeholder');
     const detailsContents = document.querySelectorAll('.details-content');
@@ -310,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
             useCaseItems.forEach(i => i.classList.remove('viewing'));
             item.classList.add('viewing');
             
-            updateNextButton(3);
+            updateNextButton(4);
         });
     });
 
@@ -324,7 +378,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Step 4: Repo selection
+    // Step 5: Repo selection
     function populateRepoList() {
         const repoList = document.getElementById('available-repos');
         repoList.innerHTML = '';
@@ -358,7 +412,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         updateSelectedReposDisplay();
-        updateNextButton(4);
+        updateNextButton(5);
     }
 
     function updateSelectedReposDisplay() {
@@ -393,7 +447,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         
         updateSelectedReposDisplay();
-        updateNextButton(4);
+        updateNextButton(5);
     };
 
     // Repo search
@@ -409,17 +463,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
-
-    // Step 5: Runtime selection
-    const runtimeCards = document.querySelectorAll('.runtime-card');
-    runtimeCards.forEach(card => {
-        card.addEventListener('click', () => {
-            runtimeCards.forEach(c => c.classList.remove('selected'));
-            card.classList.add('selected');
-            state.runtime = card.dataset.runtime;
-            updateNextButton(5);
-        });
-    });
 
     // Step 6: Model selection
     const modelCards = document.querySelectorAll('.model-card');
@@ -459,101 +502,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Step 7: Installation
-    function startInstallation() {
-        const progressFill = document.getElementById('install-progress');
-        const progressPercentage = document.getElementById('progress-percentage');
-        const progressStatus = document.getElementById('progress-status');
-        const installLog = document.getElementById('install-log');
-        
-        installLog.innerHTML = '';
-        progressFill.style.width = '0%';
-        
-        const steps = [
-            { message: 'Initializing connection...', progress: 5 },
-            { message: `Authenticating with ${state.provider}...`, progress: 15 },
-            { message: 'Fetching repository information...', progress: 25 },
-            ...state.selectedRepos.flatMap((repo, i) => [
-                { message: `Creating .github/workflows in ${repo}...`, progress: 30 + (i * 15) },
-                { message: `Installing workflows for ${repo}...`, progress: 35 + (i * 15) }
-            ]),
-            { message: 'Validating workflow configurations...', progress: 85 },
-            { message: 'Finalizing installation...', progress: 95 },
-            { message: 'Installation complete!', progress: 100, success: true }
-        ];
-        
-        let currentIndex = 0;
-        const stepDuration = 5000 / steps.length; // Total 5 seconds
-        
-        function runStep() {
-            if (currentIndex >= steps.length) {
-                setTimeout(showTutorial, 500);
-                return;
-            }
-            
-            const step = steps[currentIndex];
-            
-            // Add log entry
-            const logEntry = document.createElement('div');
-            logEntry.className = `log-entry ${step.success ? 'success' : 'processing'}`;
-            logEntry.textContent = `${step.success ? '✓' : '→'} ${step.message}`;
-            installLog.appendChild(logEntry);
-            installLog.scrollTop = installLog.scrollHeight;
-            
-            // Update progress
-            progressFill.style.width = `${step.progress}%`;
-            progressPercentage.textContent = `${step.progress}%`;
-            progressStatus.textContent = step.message;
-            
-            currentIndex++;
-            setTimeout(runStep, stepDuration);
-        }
-        
-        runStep();
-    }
-
-    function showTutorial() {
-        document.getElementById('installing-view').style.display = 'none';
-        document.getElementById('tutorial-view').style.display = 'block';
-        
-        // Mark setup as complete
-        state.setupComplete = true;
-        
-        const tutorialCards = document.getElementById('tutorial-cards');
-        tutorialCards.innerHTML = '';
-        
-        state.selectedUseCases.forEach(usecase => {
-            const data = useCaseData[usecase];
-            if (!data) return;
-            
-            let triggerInfo = '';
-            if (data.triggerType === 'issue') {
-                triggerInfo = `Add label <code>${data.trigger}</code> to any GitHub issue`;
-            } else if (data.triggerType === 'pr') {
-                triggerInfo = `Add label <code>${data.trigger}</code> to any Pull Request`;
-            } else if (data.triggerType === 'ci') {
-                triggerInfo = `Runs <code>automatically</code> when CI fails`;
-            }
-            
-            const card = document.createElement('div');
-            card.className = 'tutorial-card';
-            card.innerHTML = `
-                <h3><span>${data.emoji}</span> ${data.name}</h3>
-                <p class="tutorial-description">${data.description}</p>
-                <div class="doc-link-container">
-                    <div class="doc-link-label">📚 Documentation Link (share with your team)</div>
-                    <div class="doc-link-box">
-                        <a href="${data.docUrl}" target="_blank" class="doc-link">${data.docUrl}</a>
-                        <button class="copy-btn" onclick="copyToClipboard('${data.docUrl}', this)">Copy</button>
-                    </div>
-                </div>
-                <div class="trigger-info">
-                    <strong>How to trigger:</strong> ${triggerInfo}
-                </div>
-            `;
-            tutorialCards.appendChild(card);
-        });
-    }
-
     // Copy to clipboard function
     window.copyToClipboard = function(text, button) {
         navigator.clipboard.writeText(text).then(() => {
@@ -708,5 +656,521 @@ document.addEventListener('keydown', (e) => {
         if (modal && modal.style.display === 'flex') {
             closeEnterpriseModal();
         }
+        const newUseCaseModal = document.getElementById('new-usecase-modal');
+        if (newUseCaseModal && newUseCaseModal.style.display === 'flex') {
+            closeNewUseCaseModal();
+        }
     }
 });
+
+// Integration OAuth flow simulation
+function connectIntegration(integration) {
+    const card = document.querySelector(`.integration-card[data-integration="${integration}"]`);
+    const btn = card.querySelector('.btn-connect');
+    const status = card.querySelector('.integration-status');
+    
+    // Simulate OAuth redirect
+    btn.textContent = 'Connecting...';
+    btn.disabled = true;
+    
+    // Show a simple modal simulating OAuth
+    const overlay = document.createElement('div');
+    overlay.className = 'oauth-overlay';
+    overlay.innerHTML = `
+        <div class="oauth-modal">
+            <div class="oauth-header">
+                <h3>Connect to ${integration.charAt(0).toUpperCase() + integration.slice(1)}</h3>
+            </div>
+            <div class="oauth-body">
+                <p>Redirecting to ${integration.charAt(0).toUpperCase() + integration.slice(1)} for authorization...</p>
+                <div class="oauth-loader"></div>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    
+    // Simulate OAuth callback after a delay
+    setTimeout(() => {
+        overlay.querySelector('.oauth-body').innerHTML = `
+            <p>✅ Authorization successful!</p>
+            <p>Returning to OpenHands...</p>
+        `;
+        
+        setTimeout(() => {
+            overlay.remove();
+            card.classList.add('connected');
+            status.textContent = '✓ Connected';
+            status.classList.add('connected');
+            btn.remove();
+        }, 1000);
+    }, 2000);
+}
+
+// New Use Case Modal Functions
+function openNewUseCaseModal() {
+    const modal = document.getElementById('new-usecase-modal');
+    modal.style.display = 'flex';
+}
+
+function closeNewUseCaseModal() {
+    const modal = document.getElementById('new-usecase-modal');
+    modal.style.display = 'none';
+    
+    // Reset editing state
+    window.editingUseCaseId = null;
+    
+    // Reset modal title
+    modal.querySelector('.modal-header h2').textContent = 'Create Custom Use Case';
+    modal.querySelector('.modal-footer .btn-primary').textContent = 'Create Use Case';
+    
+    // Reset form
+    document.getElementById('custom-usecase-name').value = '';
+    document.getElementById('plugin-path').value = 'github.com/OpenHands/extensions/plugins/vulnerability-remediation';
+    document.getElementById('custom-prompt').value = '';
+    document.getElementById('plugin-status').innerHTML = '';
+    document.getElementById('trigger-label').value = '';
+    
+    // Reset radio buttons to defaults
+    document.querySelector('input[name="action-type"][value="plugin"]').checked = true;
+    document.querySelector('input[name="trigger-type"][value="event"]').checked = true;
+    toggleActionType();
+    toggleTriggerType();
+}
+
+function toggleActionType() {
+    const actionType = document.querySelector('input[name="action-type"]:checked').value;
+    document.getElementById('plugin-input-group').style.display = actionType === 'plugin' ? 'block' : 'none';
+    document.getElementById('prompt-input-group').style.display = actionType === 'prompt' ? 'block' : 'none';
+}
+
+function toggleTriggerType() {
+    const triggerType = document.querySelector('input[name="trigger-type"]:checked').value;
+    document.getElementById('event-trigger-group').style.display = triggerType === 'event' ? 'block' : 'none';
+    document.getElementById('schedule-trigger-group').style.display = triggerType === 'schedule' ? 'block' : 'none';
+}
+
+function updateTriggerEvents() {
+    const platform = document.getElementById('trigger-platform').value;
+    const eventSelect = document.getElementById('trigger-event');
+    
+    if (platform === 'jira') {
+        eventSelect.innerHTML = `
+            <option value="new-issue">New Issue</option>
+            <option value="issue-comment">Issue Comment</option>
+            <option value="issue-updated">Issue Updated</option>
+            <option value="label-added">Label Added</option>
+        `;
+    } else {
+        eventSelect.innerHTML = `
+            <option value="new-issue">New Issue</option>
+            <option value="new-pr">New PR</option>
+            <option value="issue-comment">Issue Comment</option>
+            <option value="pr-comment">PR Comment</option>
+            <option value="issue-updated">Issue Updated</option>
+            <option value="pr-updated">PR Updated</option>
+            <option value="label-added">Label Added</option>
+        `;
+    }
+    
+    // Show label input when needed
+    eventSelect.addEventListener('change', () => {
+        document.getElementById('label-input-group').style.display = 
+            eventSelect.value === 'label-added' ? 'block' : 'none';
+    });
+}
+
+function loadPlugin() {
+    const pluginPath = document.getElementById('plugin-path').value;
+    const statusEl = document.getElementById('plugin-status');
+    
+    statusEl.innerHTML = '<span class="loading">Verifying plugin...</span>';
+    
+    // Simulate loading the plugin
+    setTimeout(() => {
+        statusEl.innerHTML = `
+            <span class="success">✅ Plugin loaded successfully</span>
+            <div class="plugin-info">
+                <strong>Name:</strong> Vulnerability Remediation<br>
+                <strong>Version:</strong> 1.2.3<br>
+                <strong>Description:</strong> Automatically fix security vulnerabilities
+            </div>
+        `;
+    }, 1500);
+}
+
+function saveCustomUseCase() {
+    const name = document.getElementById('custom-usecase-name').value;
+    if (!name) {
+        alert('Please enter a use case name');
+        return;
+    }
+    
+    // Gather all the form data
+    const actionType = document.querySelector('input[name="action-type"]:checked').value;
+    const pluginPath = document.getElementById('plugin-path').value;
+    const customPrompt = document.getElementById('custom-prompt').value;
+    const triggerType = document.querySelector('input[name="trigger-type"]:checked').value;
+    const triggerPlatform = document.getElementById('trigger-platform').value;
+    const triggerEvent = document.getElementById('trigger-event').value;
+    const triggerLabel = document.getElementById('trigger-label').value;
+    const scheduleDay = document.getElementById('schedule-day').value;
+    const scheduleTime = document.getElementById('schedule-time').value;
+    
+    // Create unique ID for the custom use case
+    const useCaseId = 'custom-' + name.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now();
+    
+    // Store the custom use case data
+    const customUseCase = {
+        id: useCaseId,
+        name: name,
+        actionType: actionType,
+        pluginPath: actionType === 'plugin' ? pluginPath : null,
+        customPrompt: actionType === 'prompt' ? customPrompt : null,
+        triggerType: triggerType,
+        triggerPlatform: triggerType === 'event' ? triggerPlatform : null,
+        triggerEvent: triggerType === 'event' ? triggerEvent : null,
+        triggerLabel: triggerEvent === 'label-added' ? triggerLabel : null,
+        scheduleDay: triggerType === 'schedule' ? scheduleDay : null,
+        scheduleTime: triggerType === 'schedule' ? scheduleTime : null
+    };
+    
+    // Store in a global array for reference
+    if (!window.customUseCases) {
+        window.customUseCases = [];
+    }
+    window.customUseCases.push(customUseCase);
+    
+    console.log('Custom use case saved:', customUseCase);
+    closeNewUseCaseModal();
+    
+    // Add the custom use case to the list
+    const useCasesList = document.querySelector('.use-cases-list');
+    const newUseCaseEl = document.createElement('div');
+    newUseCaseEl.className = 'use-case-item custom';
+    newUseCaseEl.dataset.usecase = useCaseId;
+    
+    // Determine trigger summary for display
+    let triggerSummary = '';
+    if (triggerType === 'schedule') {
+        triggerSummary = `Schedule: ${scheduleDay} at ${scheduleTime}`;
+    } else {
+        const platformLabel = triggerPlatform.charAt(0).toUpperCase() + triggerPlatform.slice(1);
+        const eventLabel = triggerEvent.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        triggerSummary = `${platformLabel} - ${eventLabel}`;
+        if (triggerEvent === 'label-added' && triggerLabel) {
+            triggerSummary += ` '${triggerLabel}'`;
+        }
+    }
+    
+    newUseCaseEl.innerHTML = `
+        <div class="use-case-checkbox">
+            <span class="checkbox-icon">✓</span>
+        </div>
+        <div class="use-case-info">
+            <h3>🔧 ${name}</h3>
+            <p class="use-case-trigger">${triggerSummary}</p>
+        </div>
+        <div class="use-case-actions">
+            <button class="btn-icon edit" onclick="event.stopPropagation(); editCustomUseCase('${useCaseId}')" title="Edit">✏️</button>
+            <button class="btn-icon delete" onclick="event.stopPropagation(); deleteCustomUseCase('${useCaseId}')" title="Delete">🗑️</button>
+        </div>
+    `;
+    useCasesList.appendChild(newUseCaseEl);
+    
+    // Create the details panel for this custom use case
+    createCustomUseCaseDetailsPanel(customUseCase);
+    
+    // Add click handler for the new use case item
+    newUseCaseEl.addEventListener('click', (e) => {
+        // Don't trigger if clicking on action buttons
+        if (e.target.closest('.use-case-actions')) return;
+        handleUseCaseClick(newUseCaseEl, useCaseId);
+    });
+}
+
+function createCustomUseCaseDetailsPanel(useCase) {
+    const detailsContainer = document.querySelector('.use-case-details');
+    
+    // Build the action section
+    let actionSection = '';
+    if (useCase.actionType === 'plugin') {
+        actionSection = `
+            <div class="detail-section">
+                <h4>Plugin:</h4>
+                <code class="plugin-display">${useCase.pluginPath}</code>
+            </div>
+        `;
+    } else {
+        actionSection = `
+            <div class="detail-section">
+                <h4>Custom Prompt:</h4>
+                <div class="prompt-display">${useCase.customPrompt || '(No prompt specified)'}</div>
+            </div>
+        `;
+    }
+    
+    // Build the trigger section
+    let triggerSection = '';
+    if (useCase.triggerType === 'schedule') {
+        const dayLabel = useCase.scheduleDay === 'daily' ? 'Daily' : `Every ${useCase.scheduleDay.charAt(0).toUpperCase() + useCase.scheduleDay.slice(1)}`;
+        triggerSection = `
+            <div class="detail-section">
+                <h4>Schedule:</h4>
+                <div class="schedule-display">
+                    <span class="schedule-badge">🗓️ ${dayLabel} at ${useCase.scheduleTime}</span>
+                </div>
+            </div>
+        `;
+    } else {
+        const platformLabel = useCase.triggerPlatform.charAt(0).toUpperCase() + useCase.triggerPlatform.slice(1);
+        const eventLabel = useCase.triggerEvent.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+        let triggerText = `${platformLabel} - ${eventLabel}`;
+        if (useCase.triggerEvent === 'label-added' && useCase.triggerLabel) {
+            triggerText += ` '${useCase.triggerLabel}'`;
+        }
+        triggerSection = `
+            <div class="detail-section">
+                <h4>Event Trigger:</h4>
+                <div class="trigger-display">
+                    <span class="trigger-badge">${triggerText}</span>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Create the details panel
+    const detailsPanel = document.createElement('div');
+    detailsPanel.className = 'details-content custom-details';
+    detailsPanel.id = `details-${useCase.id}`;
+    detailsPanel.style.display = 'none';
+    detailsPanel.innerHTML = `
+        <h2>🔧 ${useCase.name}</h2>
+        <p class="detail-description">Custom use case created by you.</p>
+        
+        <div class="detail-section">
+            <h4>Type:</h4>
+            <span class="type-badge ${useCase.actionType}">${useCase.actionType === 'plugin' ? '🔌 Plugin' : '📝 Custom Prompt'}</span>
+        </div>
+        
+        ${actionSection}
+        ${triggerSection}
+    `;
+    
+    detailsContainer.appendChild(detailsPanel);
+}
+
+function handleUseCaseClick(element, useCaseId) {
+    const useCaseItems = document.querySelectorAll('.use-case-item');
+    const detailsPlaceholder = document.querySelector('.details-placeholder');
+    const detailsContents = document.querySelectorAll('.details-content');
+    
+    // Toggle selection
+    element.classList.toggle('selected');
+    
+    // Update state (we need to access it from the main scope)
+    // For now, we'll handle this via a custom event or global
+    if (element.classList.contains('selected')) {
+        if (!window.selectedUseCases) window.selectedUseCases = [];
+        if (!window.selectedUseCases.includes(useCaseId)) {
+            window.selectedUseCases.push(useCaseId);
+        }
+    } else {
+        if (window.selectedUseCases) {
+            window.selectedUseCases = window.selectedUseCases.filter(u => u !== useCaseId);
+        }
+    }
+    
+    // Show details
+    detailsPlaceholder.style.display = 'none';
+    detailsContents.forEach(d => d.style.display = 'none');
+    
+    const detailEl = document.getElementById(`details-${useCaseId}`);
+    if (detailEl) {
+        detailEl.style.display = 'block';
+    }
+    
+    // Mark as viewing
+    useCaseItems.forEach(i => i.classList.remove('viewing'));
+    element.classList.add('viewing');
+    
+    // Update next button
+    updateUseCaseNextButton();
+}
+
+function updateUseCaseNextButton() {
+    const step4 = document.getElementById('step-4');
+    const nextBtn = step4.querySelector('[data-action="next"]');
+    const selectedItems = document.querySelectorAll('.use-case-item.selected');
+    if (nextBtn) {
+        nextBtn.disabled = selectedItems.length === 0;
+    }
+}
+
+// Edit custom use case
+function editCustomUseCase(useCaseId) {
+    if (!window.customUseCases) return;
+    
+    const useCase = window.customUseCases.find(uc => uc.id === useCaseId);
+    if (!useCase) return;
+    
+    // Store the ID being edited
+    window.editingUseCaseId = useCaseId;
+    
+    // Open the modal and populate with existing values
+    const modal = document.getElementById('new-usecase-modal');
+    modal.style.display = 'flex';
+    
+    // Update modal title
+    modal.querySelector('.modal-header h2').textContent = 'Edit Use Case';
+    modal.querySelector('.modal-footer .btn-primary').textContent = 'Save Changes';
+    
+    // Populate form fields
+    document.getElementById('custom-usecase-name').value = useCase.name;
+    
+    // Set action type
+    const actionRadio = document.querySelector(`input[name="action-type"][value="${useCase.actionType}"]`);
+    if (actionRadio) {
+        actionRadio.checked = true;
+        toggleActionType();
+    }
+    
+    if (useCase.actionType === 'plugin') {
+        document.getElementById('plugin-path').value = useCase.pluginPath || '';
+    } else {
+        document.getElementById('custom-prompt').value = useCase.customPrompt || '';
+    }
+    
+    // Set trigger type
+    const triggerRadio = document.querySelector(`input[name="trigger-type"][value="${useCase.triggerType}"]`);
+    if (triggerRadio) {
+        triggerRadio.checked = true;
+        toggleTriggerType();
+    }
+    
+    if (useCase.triggerType === 'event') {
+        document.getElementById('trigger-platform').value = useCase.triggerPlatform || 'jira';
+        updateTriggerEvents();
+        document.getElementById('trigger-event').value = useCase.triggerEvent || 'new-issue';
+        if (useCase.triggerEvent === 'label-added') {
+            document.getElementById('label-input-group').style.display = 'block';
+            document.getElementById('trigger-label').value = useCase.triggerLabel || '';
+        }
+    } else {
+        document.getElementById('schedule-day').value = useCase.scheduleDay || 'daily';
+        document.getElementById('schedule-time').value = useCase.scheduleTime || '09:00';
+    }
+}
+
+// Delete custom use case
+function deleteCustomUseCase(useCaseId) {
+    if (!confirm('Are you sure you want to delete this use case?')) return;
+    
+    // Remove from customUseCases array
+    if (window.customUseCases) {
+        window.customUseCases = window.customUseCases.filter(uc => uc.id !== useCaseId);
+    }
+    
+    // Remove the list item
+    const listItem = document.querySelector(`.use-case-item[data-usecase="${useCaseId}"]`);
+    if (listItem) {
+        listItem.remove();
+    }
+    
+    // Remove the details panel
+    const detailsPanel = document.getElementById(`details-${useCaseId}`);
+    if (detailsPanel) {
+        detailsPanel.remove();
+    }
+    
+    // Show placeholder if no use case is being viewed
+    const visibleDetails = document.querySelector('.details-content[style*="block"]');
+    if (!visibleDetails) {
+        document.querySelector('.details-placeholder').style.display = 'flex';
+    }
+    
+    // Update next button state
+    updateUseCaseNextButton();
+}
+
+// Update saveCustomUseCase to handle edits
+const originalSaveCustomUseCase = saveCustomUseCase;
+saveCustomUseCase = function() {
+    const name = document.getElementById('custom-usecase-name').value;
+    if (!name) {
+        alert('Please enter a use case name');
+        return;
+    }
+    
+    // Check if we're editing an existing use case
+    if (window.editingUseCaseId) {
+        updateExistingUseCase(window.editingUseCaseId);
+        return;
+    }
+    
+    // Otherwise, call the original function to create a new one
+    originalSaveCustomUseCase();
+};
+
+function updateExistingUseCase(useCaseId) {
+    // Gather form data
+    const name = document.getElementById('custom-usecase-name').value;
+    const actionType = document.querySelector('input[name="action-type"]:checked').value;
+    const pluginPath = document.getElementById('plugin-path').value;
+    const customPrompt = document.getElementById('custom-prompt').value;
+    const triggerType = document.querySelector('input[name="trigger-type"]:checked').value;
+    const triggerPlatform = document.getElementById('trigger-platform').value;
+    const triggerEvent = document.getElementById('trigger-event').value;
+    const triggerLabel = document.getElementById('trigger-label').value;
+    const scheduleDay = document.getElementById('schedule-day').value;
+    const scheduleTime = document.getElementById('schedule-time').value;
+    
+    // Update the use case in the array
+    const useCase = window.customUseCases.find(uc => uc.id === useCaseId);
+    if (useCase) {
+        useCase.name = name;
+        useCase.actionType = actionType;
+        useCase.pluginPath = actionType === 'plugin' ? pluginPath : null;
+        useCase.customPrompt = actionType === 'prompt' ? customPrompt : null;
+        useCase.triggerType = triggerType;
+        useCase.triggerPlatform = triggerType === 'event' ? triggerPlatform : null;
+        useCase.triggerEvent = triggerType === 'event' ? triggerEvent : null;
+        useCase.triggerLabel = triggerEvent === 'label-added' ? triggerLabel : null;
+        useCase.scheduleDay = triggerType === 'schedule' ? scheduleDay : null;
+        useCase.scheduleTime = triggerType === 'schedule' ? scheduleTime : null;
+    }
+    
+    // Update the list item
+    const listItem = document.querySelector(`.use-case-item[data-usecase="${useCaseId}"]`);
+    if (listItem) {
+        let triggerSummary = '';
+        if (triggerType === 'schedule') {
+            triggerSummary = `Schedule: ${scheduleDay} at ${scheduleTime}`;
+        } else {
+            const platformLabel = triggerPlatform.charAt(0).toUpperCase() + triggerPlatform.slice(1);
+            const eventLabel = triggerEvent.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+            triggerSummary = `${platformLabel} - ${eventLabel}`;
+            if (triggerEvent === 'label-added' && triggerLabel) {
+                triggerSummary += ` '${triggerLabel}'`;
+            }
+        }
+        
+        listItem.querySelector('h3').textContent = `🔧 ${name}`;
+        listItem.querySelector('.use-case-trigger').textContent = triggerSummary;
+    }
+    
+    // Update the details panel
+    const detailsPanel = document.getElementById(`details-${useCaseId}`);
+    if (detailsPanel) {
+        detailsPanel.remove();
+    }
+    createCustomUseCaseDetailsPanel(useCase);
+    
+    // Clean up and close modal
+    window.editingUseCaseId = null;
+    closeNewUseCaseModal();
+    
+    // Reset modal title
+    const modal = document.getElementById('new-usecase-modal');
+    modal.querySelector('.modal-header h2').textContent = 'Create Custom Use Case';
+    modal.querySelector('.modal-footer .btn-primary').textContent = 'Create Use Case';
+}

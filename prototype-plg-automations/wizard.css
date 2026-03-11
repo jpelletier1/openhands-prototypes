@@ -1633,3 +1633,459 @@ body {
     padding: 16px 24px;
     border-top: 1px solid #25272d;
 }
+
+/* Integrations Step */
+.integrations-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    max-width: 900px;
+    margin: 40px auto;
+}
+
+.integration-card {
+    background-color: #1a1d21;
+    border: 1px solid #25272d;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.integration-card:hover {
+    border-color: #3b82f6;
+    transform: translateY(-2px);
+}
+
+.integration-card.connected {
+    border-color: #22c55e;
+    background-color: rgba(34, 197, 94, 0.05);
+    cursor: default;
+}
+
+.integration-icon {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.integration-icon svg {
+    width: 48px;
+    height: 48px;
+}
+
+.slack-icon svg {
+    color: #4A154B;
+}
+
+.jira-icon svg {
+    color: #0052CC;
+}
+
+.integration-info h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.integration-status {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.integration-status.connected {
+    color: #22c55e;
+    font-weight: 500;
+}
+
+.btn-connect {
+    margin-top: 16px;
+    padding: 10px 24px;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-connect:hover {
+    background-color: #2563eb;
+}
+
+.btn-connect:disabled {
+    background-color: #525252;
+    cursor: not-allowed;
+}
+
+/* OAuth Overlay */
+.oauth-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.oauth-modal {
+    background-color: #1a1d21;
+    border: 1px solid #25272d;
+    border-radius: 12px;
+    padding: 32px;
+    text-align: center;
+    min-width: 400px;
+}
+
+.oauth-header h3 {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.oauth-body p {
+    color: #a1a1a1;
+    margin-bottom: 16px;
+}
+
+.oauth-loader {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #25272d;
+    border-top-color: #3b82f6;
+    border-radius: 50%;
+    margin: 20px auto;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* New Use Case Button */
+.btn-new-usecase {
+    width: 100%;
+    padding: 16px;
+    background-color: transparent;
+    border: 2px dashed #525252;
+    border-radius: 8px;
+    color: #a1a1a1;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+}
+
+.btn-new-usecase:hover {
+    border-color: #3b82f6;
+    color: #3b82f6;
+}
+
+.btn-new-usecase .plus-icon {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+/* Trigger Options */
+.trigger-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.trigger-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background-color: #25272d;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.trigger-checkbox:hover {
+    background-color: #2d3138;
+}
+
+.trigger-checkbox input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #3b82f6;
+}
+
+.trigger-checkbox span {
+    font-size: 14px;
+    color: #d1d5db;
+}
+
+/* Schedule Picker */
+.schedule-picker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.schedule-picker select,
+.schedule-picker input[type="time"] {
+    padding: 10px 14px;
+    background-color: #25272d;
+    border: 1px solid #525252;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+}
+
+.schedule-picker select:focus,
+.schedule-picker input[type="time"]:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.schedule-picker span {
+    color: #a1a1a1;
+}
+
+/* Slash Command */
+.slash-command {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #1e293b;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 14px;
+    color: #60a5fa;
+}
+
+/* Large Modal */
+.modal-content.large {
+    max-width: 600px;
+    width: 90%;
+}
+
+/* Radio Group */
+.radio-group {
+    display: flex;
+    gap: 16px;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.radio-option input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #3b82f6;
+}
+
+.radio-option span {
+    font-size: 14px;
+    color: #d1d5db;
+}
+
+/* Plugin Path Input */
+.plugin-path-input {
+    display: flex;
+    gap: 12px;
+}
+
+.plugin-path-input input {
+    flex: 1;
+}
+
+.plugin-status {
+    margin-top: 12px;
+}
+
+.plugin-status .loading {
+    color: #fbbf24;
+}
+
+.plugin-status .success {
+    color: #22c55e;
+}
+
+.plugin-status .error {
+    color: #ef4444;
+}
+
+.plugin-info {
+    margin-top: 8px;
+    padding: 12px;
+    background-color: #25272d;
+    border-radius: 8px;
+    font-size: 13px;
+    color: #a1a1a1;
+    line-height: 1.6;
+}
+
+/* Modal Form Selects and Textareas */
+.modal-body select {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #25272d;
+    border: 1px solid #525252;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.modal-body select:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.modal-body textarea {
+    width: 100%;
+    padding: 12px 16px;
+    background-color: #25272d;
+    border: 1px solid #525252;
+    border-radius: 8px;
+    color: white;
+    font-size: 14px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.modal-body textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+/* Form Group Spacing */
+.modal-body .form-group {
+    margin-bottom: 20px;
+}
+
+/* Custom Use Case Item */
+.use-case-item.custom {
+    border-color: #8b5cf6;
+    background-color: rgba(139, 92, 246, 0.05);
+}
+
+/* Custom Use Case Details */
+.custom-details .type-badge {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.custom-details .type-badge.plugin {
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #60a5fa;
+}
+
+.custom-details .type-badge.prompt {
+    background-color: rgba(139, 92, 246, 0.15);
+    color: #a78bfa;
+}
+
+.custom-details .plugin-display {
+    display: block;
+    padding: 12px 16px;
+    background-color: #1e293b;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 13px;
+    color: #60a5fa;
+    word-break: break-all;
+}
+
+.custom-details .prompt-display {
+    padding: 12px 16px;
+    background-color: #25272d;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #d1d5db;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.custom-details .schedule-display,
+.custom-details .trigger-display {
+    margin-top: 8px;
+}
+
+.custom-details .schedule-badge,
+.custom-details .trigger-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Use Case Action Buttons (Edit/Delete) */
+.use-case-actions {
+    display: flex;
+    gap: 4px;
+    margin-left: auto;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.use-case-item:hover .use-case-actions,
+.use-case-item.viewing .use-case-actions {
+    opacity: 1;
+}
+
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background-color: transparent;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.btn-icon.edit:hover {
+    background-color: rgba(59, 130, 246, 0.2);
+}
+
+.btn-icon.delete:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+}
+
+/* Adjust use-case-item to accommodate actions */
+.use-case-item.custom {
+    display: flex;
+    align-items: center;
+}
