@@ -1174,3 +1174,19 @@ function updateExistingUseCase(useCaseId) {
     modal.querySelector('.modal-header h2').textContent = 'Create Custom Use Case';
     modal.querySelector('.modal-footer .btn-primary').textContent = 'Create Use Case';
 }
+
+// Export functions to window for inline HTML event handlers
+window.openEnterpriseModal = openEnterpriseModal;
+window.closeEnterpriseModal = closeEnterpriseModal;
+window.saveEnterpriseConfig = saveEnterpriseConfig;
+window.connectIntegration = connectIntegration;
+window.openNewUseCaseModal = openNewUseCaseModal;
+window.closeNewUseCaseModal = closeNewUseCaseModal;
+window.toggleActionType = toggleActionType;
+window.toggleTriggerType = toggleTriggerType;
+window.updateTriggerEvents = updateTriggerEvents;
+window.loadPlugin = loadPlugin;
+window.saveCustomUseCase = saveCustomUseCase;
+window.handleUseCaseClick = handleUseCaseClick;
+window.editCustomUseCase = editCustomUseCase;
+window.deleteCustomUseCase = deleteCustomUseCase;
