@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenHands Setup Wizard</title>
+    <link rel="stylesheet" href="wizard.css">
+</head>
+<body>
+    <div class="wizard-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="emoji-logo">🤖</span>
+            </div>
+            <div class="sidebar-title">OpenHands</div>
+            
+            <!-- Main Navigation -->
+            <nav class="main-nav">
+                <div class="nav-item" data-nav="dashboard" onclick="navigateTo('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Dashboard</span>
+                </div>
+                
+                <div class="nav-item active" data-nav="wizard">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Install Use Cases</span>
+                    <span class="nav-arrow">▼</span>
+                </div>
+                
+                <!-- Wizard Sub-steps (shown when wizard is active) -->
+                <div class="wizard-substeps" id="wizard-substeps">
+                    <div class="progress-step active" data-step="1">
+                        <span class="step-number">1</span>
+                        <span class="step-label">Login</span>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <span class="step-number">2</span>
+                        <span class="step-label">Profile</span>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <span class="step-number">3</span>
+                        <span class="step-label">Use Cases</span>
+                    </div>
+                    <div class="progress-step" data-step="4">
+                        <span class="step-number">4</span>
+                        <span class="step-label">Repos</span>
+                    </div>
+                    <div class="progress-step" data-step="5">
+                        <span class="step-number">5</span>
+                        <span class="step-label">Runtime</span>
+                    </div>
+                    <div class="progress-step" data-step="6">
+                        <span class="step-number">6</span>
+                        <span class="step-label">Model</span>
+                    </div>
+                    <div class="progress-step" data-step="7">
+                        <span class="step-number">7</span>
+                        <span class="step-label">Install</span>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="https://docs.openhands.dev" target="_blank" class="help-link">
+                    <span class="emoji-icon">❓</span>
+                    <span>Help</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Step 1: Login -->
+            <section class="wizard-step active" id="step-1">
+                <div class="step-content centered">
+                    <div class="step-header">
+                        <h1>Welcome to OpenHands</h1>
+                        <p>Connect your Git provider to get started</p>
+                    </div>
+                    
+                    <div class="login-buttons">
+                        <button class="provider-btn github" data-provider="github">
+                            <svg class="provider-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                            </svg>
+                            <span>Continue with GitHub</span>
+                        </button>
+                        
+                        <button class="provider-btn bitbucket" data-provider="bitbucket">
+                            <svg class="provider-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M.778 1.211a.768.768 0 00-.768.892l3.263 19.81c.084.5.515.868 1.022.873H19.95a.772.772 0 00.77-.646l3.27-20.03a.768.768 0 00-.768-.891zM14.52 15.53H9.522L8.17 8.466h7.561z"/>
+                            </svg>
+                            <span>Continue with Bitbucket</span>
+                        </button>
+                        
+                        <button class="provider-btn gitlab" data-provider="gitlab">
+                            <svg class="provider-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23.955 13.587l-1.342-4.135-2.664-8.189a.455.455 0 00-.867 0L16.418 9.45H7.582L4.918 1.263a.455.455 0 00-.867 0L1.386 9.452.044 13.587a.924.924 0 00.331 1.023L12 23.054l11.625-8.443a.92.92 0 00.33-1.024"/>
+                            </svg>
+                            <span>Continue with GitLab</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 2: Profile Questions -->
+            <section class="wizard-step" id="step-2">
+                <div class="step-content">
+                    <div class="step-header">
+                        <h1>Tell us about yourself</h1>
+                        <p>Help us personalize your experience</p>
+                    </div>
+                    
+                    <div class="questions-form">
+                        <div class="question-group">
+                            <label>What's your role?</label>
+                            <div class="option-buttons">
+                                <button class="option-btn" data-field="role" data-value="developer">Software Developer</button>
+                                <button class="option-btn" data-field="role" data-value="lead">Tech Lead</button>
+                                <button class="option-btn" data-field="role" data-value="manager">Engineering Manager</button>
+                                <button class="option-btn" data-field="role" data-value="architect">Architect</button>
+                                <button class="option-btn" data-field="role" data-value="devops">DevOps Engineer</button>
+                                <button class="option-btn" data-field="role" data-value="other">Other</button>
+                            </div>
+                        </div>
+                        
+                        <div class="question-group">
+                            <label>Are you evaluating OpenHands for...</label>
+                            <div class="option-buttons">
+                                <button class="option-btn" data-field="purpose" data-value="personal">Personal use</button>
+                                <button class="option-btn" data-field="purpose" data-value="org">Organizational initiative</button>
+                            </div>
+                        </div>
+                        
+                        <div class="question-group">
+                            <label>What size organization do you work for?</label>
+                            <div class="option-buttons">
+                                <button class="option-btn" data-field="orgSize" data-value="1-10">1-10 employees</button>
+                                <button class="option-btn" data-field="orgSize" data-value="11-50">11-50 employees</button>
+                                <button class="option-btn" data-field="orgSize" data-value="51-200">51-200 employees</button>
+                                <button class="option-btn" data-field="orgSize" data-value="201-1000">201-1000 employees</button>
+                                <button class="option-btn" data-field="orgSize" data-value="1000+">1000+ employees</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn-secondary" data-action="back">Back</button>
+                        <button class="btn-primary" data-action="next" disabled>Continue</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 3: Use Case Selection -->
+            <section class="wizard-step" id="step-3">
+                <div class="step-content split-layout">
+                    <div class="step-header full-width">
+                        <h1>Select Use Cases</h1>
+                        <p>Choose which automations to install (select multiple)</p>
+                    </div>
+                    
+                    <div class="split-container">
+                        <div class="use-cases-list">
+                            <div class="use-case-item" data-usecase="prd-refinement">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>PRD Refinement</h3>
+                                    <p class="use-case-trigger">Trigger: <code>openhands:refine</code></p>
+                                </div>
+                            </div>
+                            
+                            <div class="use-case-item" data-usecase="spec-generator">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>Spec Generator</h3>
+                                    <p class="use-case-trigger">Trigger: <code>openhands:spec</code></p>
+                                </div>
+                            </div>
+                            
+                            <div class="use-case-item" data-usecase="refactor">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>Refactor</h3>
+                                    <p class="use-case-trigger">Trigger: <code>openhands:refactor</code></p>
+                                </div>
+                            </div>
+                            
+                            <div class="use-case-item" data-usecase="dependency-upgrades">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>Dependency Upgrades</h3>
+                                    <p class="use-case-trigger">Trigger: <code>openhands:upgrade</code></p>
+                                </div>
+                            </div>
+                            
+                            <div class="use-case-item" data-usecase="bug-fixer">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>Bug Fixer</h3>
+                                    <p class="use-case-trigger">Trigger: <code>bug</code></p>
+                                </div>
+                            </div>
+                            
+                            <div class="use-case-item" data-usecase="pr-review">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>PR Review</h3>
+                                    <p class="use-case-trigger">Trigger: <code>openhands:review</code></p>
+                                </div>
+                            </div>
+                            
+                            <div class="use-case-item" data-usecase="vulnerability-remediation">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>Vulnerability Remediation</h3>
+                                    <p class="use-case-trigger">Trigger: <code>openhands:remediate</code></p>
+                                </div>
+                            </div>
+                            
+                            <div class="use-case-item" data-usecase="ci-failure-fixer">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>CI Failure Fixer</h3>
+                                    <p class="use-case-trigger">Trigger: <code>automatic on CI failure</code></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="use-case-details">
+                            <div class="details-placeholder">
+                                <span class="emoji-large">👈</span>
+                                <p>Select a use case to see details</p>
+                            </div>
+                            
+                            <div class="details-content" id="details-prd-refinement" style="display: none;">
+                                <h2>PRD Refinement</h2>
+                                <p class="detail-description">Automatically analyze and refine Product Requirements Documents by identifying gaps, suggesting improvements, and adding technical specifications.</p>
+                                <div class="detail-section">
+                                    <h4>How to trigger:</h4>
+                                    <p>Add the label <code>openhands:refine</code> to any GitHub issue containing a PRD.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>What it does:</h4>
+                                    <ul>
+                                        <li>Analyzes the PRD for completeness</li>
+                                        <li>Identifies ambiguous requirements</li>
+                                        <li>Suggests acceptance criteria</li>
+                                        <li>Adds technical considerations</li>
+                                    </ul>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Example:</h4>
+                                    <div class="code-example">
+                                        <code>1. Create an issue with your PRD<br>2. Add label: openhands:refine<br>3. OpenHands will comment with improvements</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="details-content" id="details-spec-generator" style="display: none;">
+                                <h2>Spec Generator</h2>
+                                <p class="detail-description">Generate detailed technical specifications from high-level requirements, including architecture diagrams, API contracts, and implementation plans.</p>
+                                <div class="detail-section">
+                                    <h4>How to trigger:</h4>
+                                    <p>Add the label <code>openhands:spec</code> to any GitHub issue with feature requirements.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>What it does:</h4>
+                                    <ul>
+                                        <li>Creates detailed technical specs</li>
+                                        <li>Defines API contracts</li>
+                                        <li>Outlines data models</li>
+                                        <li>Proposes implementation approach</li>
+                                    </ul>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Example:</h4>
+                                    <div class="code-example">
+                                        <code>1. Create an issue describing the feature<br>2. Add label: openhands:spec<br>3. Receive a detailed technical specification</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="details-content" id="details-refactor" style="display: none;">
+                                <h2>Refactor</h2>
+                                <p class="detail-description">Intelligently refactor code in pull requests to improve code quality, readability, and maintainability while preserving functionality.</p>
+                                <div class="detail-section">
+                                    <h4>How to trigger:</h4>
+                                    <p>Add the label <code>openhands:refactor</code> to any pull request.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>What it does:</h4>
+                                    <ul>
+                                        <li>Improves code structure</li>
+                                        <li>Extracts reusable functions</li>
+                                        <li>Applies design patterns</li>
+                                        <li>Enhances naming conventions</li>
+                                    </ul>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Example:</h4>
+                                    <div class="code-example">
+                                        <code>1. Open a PR with code changes<br>2. Add label: openhands:refactor<br>3. OpenHands suggests refactoring improvements</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="details-content" id="details-dependency-upgrades" style="display: none;">
+                                <h2>Dependency Upgrades</h2>
+                                <p class="detail-description">Automatically upgrade project dependencies, handle breaking changes, and ensure compatibility across your codebase.</p>
+                                <div class="detail-section">
+                                    <h4>How to trigger:</h4>
+                                    <p>Add the label <code>openhands:upgrade</code> to an issue specifying the dependencies to upgrade.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>What it does:</h4>
+                                    <ul>
+                                        <li>Updates dependency versions</li>
+                                        <li>Fixes breaking changes</li>
+                                        <li>Updates deprecated APIs</li>
+                                        <li>Runs tests to verify compatibility</li>
+                                    </ul>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Example:</h4>
+                                    <div class="code-example">
+                                        <code>1. Create issue: "Upgrade React to v18"<br>2. Add label: openhands:upgrade<br>3. Receive a PR with all necessary changes</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="details-content" id="details-bug-fixer" style="display: none;">
+                                <h2>Bug Fixer</h2>
+                                <p class="detail-description">Automatically investigate and fix bugs based on issue descriptions, error logs, and reproduction steps.</p>
+                                <div class="detail-section">
+                                    <h4>How to trigger:</h4>
+                                    <p>Add the label <code>bug</code> to any GitHub issue with bug details.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>What it does:</h4>
+                                    <ul>
+                                        <li>Analyzes bug reports</li>
+                                        <li>Identifies root causes</li>
+                                        <li>Creates a fix PR</li>
+                                        <li>Adds regression tests</li>
+                                    </ul>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Example:</h4>
+                                    <div class="code-example">
+                                        <code>1. Create issue with bug description<br>2. Add label: bug<br>3. OpenHands creates a PR with the fix</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="details-content" id="details-pr-review" style="display: none;">
+                                <h2>PR Review</h2>
+                                <p class="detail-description">Perform comprehensive code reviews on pull requests, identifying issues, suggesting improvements, and ensuring code quality standards.</p>
+                                <div class="detail-section">
+                                    <h4>How to trigger:</h4>
+                                    <p>Add the label <code>openhands:review</code> to any pull request.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>What it does:</h4>
+                                    <ul>
+                                        <li>Reviews code for issues</li>
+                                        <li>Checks for security vulnerabilities</li>
+                                        <li>Suggests optimizations</li>
+                                        <li>Verifies test coverage</li>
+                                    </ul>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Example:</h4>
+                                    <div class="code-example">
+                                        <code>1. Open a pull request<br>2. Add label: openhands:review<br>3. Receive detailed code review comments</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="details-content" id="details-vulnerability-remediation" style="display: none;">
+                                <h2>Vulnerability Remediation</h2>
+                                <p class="detail-description">Automatically fix security vulnerabilities identified by security scanners and dependency audits.</p>
+                                <div class="detail-section">
+                                    <h4>How to trigger:</h4>
+                                    <p>Add the label <code>openhands:remediate</code> to security advisory issues.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>What it does:</h4>
+                                    <ul>
+                                        <li>Analyzes vulnerability reports</li>
+                                        <li>Updates affected dependencies</li>
+                                        <li>Patches vulnerable code</li>
+                                        <li>Validates the fix</li>
+                                    </ul>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Example:</h4>
+                                    <div class="code-example">
+                                        <code>1. Dependabot creates security alert<br>2. Add label: openhands:remediate<br>3. OpenHands creates a fix PR</code>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="details-content" id="details-ci-failure-fixer" style="display: none;">
+                                <h2>CI Failure Fixer</h2>
+                                <p class="detail-description">Automatically analyze and fix CI pipeline failures, including test failures, linting errors, and build issues.</p>
+                                <div class="detail-section">
+                                    <h4>How to trigger:</h4>
+                                    <p><strong>Automatic:</strong> Triggers whenever a CI workflow fails.</p>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>What it does:</h4>
+                                    <ul>
+                                        <li>Analyzes CI failure logs</li>
+                                        <li>Identifies the root cause</li>
+                                        <li>Creates a fix commit</li>
+                                        <li>Re-runs the pipeline</li>
+                                    </ul>
+                                </div>
+                                <div class="detail-section">
+                                    <h4>Example:</h4>
+                                    <div class="code-example">
+                                        <code>1. CI pipeline fails on your PR<br>2. OpenHands automatically analyzes the failure<br>3. A fix commit is pushed to your branch</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions full-width">
+                        <button class="btn-secondary" data-action="back">Back</button>
+                        <button class="btn-primary" data-action="next" disabled>Continue</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 4: Repo Selection -->
+            <section class="wizard-step" id="step-4">
+                <div class="step-content split-layout">
+                    <div class="step-header full-width">
+                        <h1>Select Repositories</h1>
+                        <p>Choose which repositories to install the selected use cases</p>
+                    </div>
+                    
+                    <div class="split-container">
+                        <div class="repo-list-container">
+                            <div class="search-box">
+                                <span class="search-icon">🔍</span>
+                                <input type="text" id="repo-search" placeholder="Search repositories...">
+                            </div>
+                            <div class="repo-list" id="available-repos">
+                                <!-- Repos will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="selected-repos-container">
+                            <h3>Selected Repositories</h3>
+                            <div class="selected-repos" id="selected-repos">
+                                <div class="empty-selection">
+                                    <span class="emoji-icon">📂</span>
+                                    <p>Click repositories on the left to add them</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions full-width">
+                        <button class="btn-secondary" data-action="back">Back</button>
+                        <button class="btn-primary" data-action="next" disabled>Continue</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 5: Runtime Environment -->
+            <section class="wizard-step" id="step-5">
+                <div class="step-content">
+                    <div class="step-header">
+                        <h1>Choose Runtime Environment</h1>
+                        <p>Where do you want to run the OpenHands agents?</p>
+                    </div>
+                    
+                    <div class="runtime-options">
+                        <div class="runtime-card" data-runtime="local">
+                            <div class="runtime-header">
+                                <span class="runtime-icon">💻</span>
+                                <h3>Local Runtime</h3>
+                            </div>
+                            <p>Run agents on your own infrastructure</p>
+                            <ul class="runtime-features">
+                                <li class="feature-included">✓ Full control over execution</li>
+                                <li class="feature-included">✓ No data leaves your network</li>
+                                <li class="feature-included">✓ Free to run</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="runtime-card recommended" data-runtime="cloud">
+                            <div class="recommended-badge">Recommended</div>
+                            <div class="runtime-header">
+                                <span class="runtime-icon">☁️</span>
+                                <h3>OpenHands Cloud</h3>
+                            </div>
+                            <p>Managed cloud infrastructure with advanced features</p>
+                            <ul class="runtime-features">
+                                <li class="feature-included">✓ Full control over execution</li>
+                                <li class="feature-included">✓ Enterprise-grade security</li>
+                                <li class="feature-included">✓ Pay per use</li>
+                            </ul>
+                            <a href="#" class="enterprise-config-link" onclick="event.stopPropagation(); openEnterpriseModal();">OpenHands Enterprise Configuration</a>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-comparison">
+                        <h3>OpenHands Cloud Exclusive Features</h3>
+                        <table class="comparison-table">
+                            <thead>
+                                <tr>
+                                    <th>Feature</th>
+                                    <th>Local</th>
+                                    <th>Cloud</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Live conversation monitoring</td>
+                                    <td class="feature-no">✗</td>
+                                    <td class="feature-yes">✓</td>
+                                    <td>Real-time human-in-the-loop control and visibility into conversation logs</td>
+                                </tr>
+                                <tr>
+                                    <td>Centralized data access</td>
+                                    <td class="feature-no">✗</td>
+                                    <td class="feature-yes">✓</td>
+                                    <td>Important for auditability and troubleshooting</td>
+                                </tr>
+                                <tr>
+                                    <td>Multi-user RBAC</td>
+                                    <td class="feature-no">✗</td>
+                                    <td class="feature-yes">✓</td>
+                                    <td>Grant developers access to conversation logs</td>
+                                </tr>
+                                <tr>
+                                    <td>Read-only sharing</td>
+                                    <td class="feature-no">✗</td>
+                                    <td class="feature-yes">✓</td>
+                                    <td>Share links to previous conversation logs</td>
+                                </tr>
+                                <tr>
+                                    <td>Scalable runtimes</td>
+                                    <td class="feature-no">✗</td>
+                                    <td class="feature-yes">✓</td>
+                                    <td>Secure agent execution outside of your developer machines</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn-secondary" data-action="back">Back</button>
+                        <button class="btn-primary" data-action="next" disabled>Continue</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 6: Model Selection -->
+            <section class="wizard-step" id="step-6">
+                <div class="step-content">
+                    <div class="step-header">
+                        <h1>Select LLM Provider</h1>
+                        <p>Choose how you want to power the AI agents</p>
+                    </div>
+                    
+                    <div class="model-options">
+                        <div class="model-card" data-model="openhands">
+                            <div class="model-header">
+                                <span class="model-icon">🤖</span>
+                                <h3>OpenHands LLM Provider</h3>
+                            </div>
+                            <p>Use OpenHands-managed AI models with pay-per-use pricing</p>
+                            <ul class="model-features">
+                                <li>✓ No API key needed</li>
+                                <li>✓ Optimized for coding tasks</li>
+                                <li>✓ Simple billing</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="model-card" data-model="byok">
+                            <div class="model-header">
+                                <span class="model-icon">🔑</span>
+                                <h3>Bring Your Own Key</h3>
+                            </div>
+                            <p>Use your existing OpenAI, Anthropic, or other LLM provider</p>
+                            <div class="byok-input" style="display: none;">
+                                <select id="provider-select">
+                                    <option value="">Select provider...</option>
+                                    <option value="openai">OpenAI</option>
+                                    <option value="anthropic">Anthropic</option>
+                                    <option value="google">Google AI</option>
+                                    <option value="azure">Azure OpenAI</option>
+                                </select>
+                                <input type="password" id="api-key-input" placeholder="Enter your API key">
+                            </div>
+                        </div>
+                        
+                        <div class="model-card promo" data-model="credits">
+                            <div class="promo-badge">🎁 Special Offer</div>
+                            <div class="model-header">
+                                <span class="model-icon">💰</span>
+                                <h3>Get $50 Free Credits</h3>
+                            </div>
+                            <p>Try OpenHands LLM Provider risk-free with $50 in credits</p>
+                            <div class="credits-input" style="display: none;">
+                                <input type="email" id="business-email" placeholder="Enter your business email">
+                                <p class="credits-note">Business email required (no gmail, yahoo, etc.)</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn-secondary" data-action="back">Back</button>
+                        <button class="btn-primary" data-action="next" disabled>Continue</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 7: Installation -->
+            <section class="wizard-step" id="step-7">
+                <div class="step-content centered">
+                    <div class="installation-container" id="installing-view">
+                        <div class="step-header">
+                            <h1>Installing Workflows</h1>
+                            <p>Setting up GitHub Actions in your repositories</p>
+                        </div>
+                        
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="install-progress"></div>
+                            </div>
+                            <div class="progress-text">
+                                <span id="progress-percentage">0%</span>
+                                <span id="progress-status">Initializing...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="install-log" id="install-log">
+                            <!-- Installation log will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <div class="tutorial-container" id="tutorial-view" style="display: none;">
+                        <div class="step-header">
+                            <h1>🎉 Installation Complete!</h1>
+                            <p>Your GitHub workflows have been installed successfully</p>
+                        </div>
+                        
+                        <div class="tutorial-content">
+                            <h2>How to Use Your New Automations</h2>
+                            <p class="tutorial-subtitle">Share these documentation links with your team to help them get started</p>
+                            <div class="tutorial-cards" id="tutorial-cards">
+                                <!-- Tutorial cards will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="step-actions">
+                            <button class="btn-primary large" onclick="navigateTo('dashboard')">
+                                Go to Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard View (not a wizard step) -->
+            <section class="wizard-step" id="dashboard-view">
+                <div class="step-content">
+                    <!-- Not Setup View -->
+                    <div id="not-setup-view" style="display: none;">
+                        <div class="step-content centered">
+                            <div class="not-setup-container">
+                                <span class="not-setup-icon">🚀</span>
+                                <h1>Welcome to OpenHands</h1>
+                                <p>You haven't set up any use cases yet. Get started by installing AI-powered workflows into your repositories.</p>
+                                <div class="not-setup-features">
+                                    <div class="feature-item">
+                                        <span>🐛</span>
+                                        <span>Automatic Bug Fixing</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span>👀</span>
+                                        <span>AI Code Reviews</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span>🔧</span>
+                                        <span>CI Failure Remediation</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span>📦</span>
+                                        <span>Dependency Upgrades</span>
+                                    </div>
+                                </div>
+                                <button class="btn-primary large" onclick="navigateTo('wizard')">
+                                    Install Use Cases
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cloud Monitoring View -->
+                    <div id="cloud-monitoring-view">
+                        <div class="step-header">
+                            <h1>📊 Monitoring Dashboard</h1>
+                            <p>Track your OpenHands agent activity and usage</p>
+                        </div>
+                        
+                        <!-- Stats Cards -->
+                        <div class="stats-cards">
+                            <div class="stat-card">
+                                <div class="stat-icon">💬</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">247</div>
+                                    <div class="stat-label">Total Conversations</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">⏰</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">18</div>
+                                    <div class="stat-label">Conversations (24h)</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">🔀</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">89</div>
+                                    <div class="stat-label">OpenHands-assisted PRs</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">💰</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">$0.42</div>
+                                    <div class="stat-label">Avg Cost per Task</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Rankings Section -->
+                        <div class="rankings-section">
+                            <div class="ranking-card">
+                                <h3>📁 Conversations by Repository</h3>
+                                <div class="ranking-list" id="repo-rankings">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
+                            <div class="ranking-card">
+                                <h3>🎯 Top Use Cases by Conversations</h3>
+                                <div class="ranking-list" id="usecase-rankings">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Section -->
+                        <div class="chart-section">
+                            <h3>📈 Daily Conversations (Last 30 Days)</h3>
+                            <div class="chart-container">
+                                <div class="chart-bars" id="conversation-chart">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                                <div class="chart-labels">
+                                    <span>30d ago</span>
+                                    <span>20d ago</span>
+                                    <span>10d ago</span>
+                                    <span>Today</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-actions dashboard-actions">
+                            <button class="btn-secondary" onclick="navigateTo('wizard'); setTimeout(() => goToStep(3), 100);">
+                                <span>⚙️</span> Install More Use Cases
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Local Runtime Blocked View -->
+                    <div id="local-monitoring-view" style="display: none;">
+                        <div class="blocked-overlay">
+                            <div class="blocked-content">
+                                <div class="blocked-banner">
+                                    <span class="blocked-icon">🔒</span>
+                                    <h2>No Visibility into Conversation Metrics</h2>
+                                    <p>Local runtime doesn't support centralized monitoring and analytics.</p>
+                                    <p>Switch to OpenHands Cloud to unlock:</p>
+                                    <ul class="blocked-features">
+                                        <li>📊 Real-time conversation analytics</li>
+                                        <li>👁️ Live conversation monitoring</li>
+                                        <li>📈 Usage trends and insights</li>
+                                        <li>🔗 Shareable conversation links</li>
+                                    </ul>
+                                    <button class="btn-primary" onclick="navigateTo('wizard'); setTimeout(() => goToStep(5), 100);">
+                                        Configure Workflows for OpenHands Cloud
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Blurred background preview -->
+                            <div class="blurred-preview">
+                                <div class="stats-cards blurred">
+                                    <div class="stat-card">
+                                        <div class="stat-icon">💬</div>
+                                        <div class="stat-info">
+                                            <div class="stat-value">---</div>
+                                            <div class="stat-label">Total Conversations</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">⏰</div>
+                                        <div class="stat-info">
+                                            <div class="stat-value">---</div>
+                                            <div class="stat-label">Conversations (24h)</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">🔀</div>
+                                        <div class="stat-info">
+                                            <div class="stat-value">---</div>
+                                            <div class="stat-label">OpenHands-assisted PRs</div>
+                                        </div>
+                                    </div>
+                                    <div class="stat-card">
+                                        <div class="stat-icon">💰</div>
+                                        <div class="stat-info">
+                                            <div class="stat-value">---</div>
+                                            <div class="stat-label">Avg Cost per Task</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Enterprise Configuration Modal -->
+    <div class="modal-overlay" id="enterprise-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>OpenHands Enterprise Configuration</h2>
+                <button class="modal-close" onclick="closeEnterpriseModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="enterprise-hostname">Hostname</label>
+                    <input type="text" id="enterprise-hostname" placeholder="e.g., openhands.yourcompany.com">
+                </div>
+                <div class="form-group">
+                    <label for="enterprise-api-key">API Key</label>
+                    <input type="password" id="enterprise-api-key" placeholder="Enter your API key">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeEnterpriseModal()">Cancel</button>
+                <button class="btn-primary" onclick="saveEnterpriseConfig()">Save Configuration</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="wizard.js"></script>
+</body>
+</html>

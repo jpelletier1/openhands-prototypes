@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Conversation Interface - My Awesome Project</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="conversation-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="emoji-logo">🚀</span>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-icon" title="Menu">
+                    <span class="emoji-icon">☰</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-avatar">
+                    <span class="emoji-avatar">😊</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content Wrapper -->
+        <div class="content-wrapper">
+            <!-- Top Header -->
+            <header class="top-header">
+                <div class="header-left">
+                    <h1 class="project-title">My Awesome Project</h1>
+                    <button class="three-dots" title="Options">
+                        <span class="emoji-icon">⋯</span>
+                    </button>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="action-btn" title="Changes">
+                        <span class="emoji-icon">✅</span>
+                    </button>
+                    <button class="action-btn" title="Browser">
+                        <span class="emoji-icon">🌐</span>
+                    </button>
+                    <button class="action-btn" title="Code Editor">
+                        <span class="emoji-icon">💻</span>
+                    </button>
+                    <button class="action-btn" title="Terminal">
+                        <span class="emoji-icon">⌨️</span>
+                    </button>
+                    <button class="action-btn" title="Share">
+                        <span class="emoji-icon">🔗</span>
+                    </button>
+                    <div class="divider"></div>
+                    <button class="action-btn" title="Drawer">
+                        <span class="emoji-icon">📂</span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Content Row -->
+            <div class="content-row">
+                <!-- Main Content Area -->
+                <main class="main-content">
+                    <div id="conversation-content"></div>
+                    <!-- Chat Controls -->
+                    <div class="chat-controls">
+                        <div class="chat-input-container">
+                            <div class="input-icon">
+                                <span class="emoji-icon">🤖</span>
+                            </div>
+                            <input type="text" class="chat-input" placeholder="What do you want to build?">
+                            <button class="send-button">
+                                <span class="emoji-icon">⬆️</span>
+                            </button>
+                        </div>
+                        
+                        <div class="chat-status">
+                            <div class="status-left">
+                                <span class="emoji-icon-small">🔧</span>
+                                <span>Tools</span>
+                            </div>
+                            <div class="status-center">
+                                <span class="emoji-icon-small">▶️</span>
+                                <span>Running</span>
+                            </div>
+                            <div class="status-right">
+                                <span>Initializing Agent...</span>
+                                <div class="status-icon">
+                                    <span class="emoji-icon-small">🔄</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Git Controls -->
+                    <div class="git-controls">
+                        <button class="git-btn repo-btn">
+                            <span class="emoji-icon-small">📁</span>
+                            <span>repo/repo</span>
+                        </button>
+                        <button class="git-btn branch-btn">
+                            <span class="emoji-icon-small">🌿</span>
+                            <span>branch-name</span>
+                        </button>
+                        <button class="git-btn pull-btn">
+                            <span class="emoji-icon-small">⬇️</span>
+                            <span>Pull</span>
+                        </button>
+                        <button class="git-btn push-btn">
+                            <span class="emoji-icon-small">⬆️</span>
+                            <span>Push</span>
+                        </button>
+                        <button class="git-btn pr-btn">
+                            <span class="emoji-icon-small">🔀</span>
+                            <span>Pull Request</span>
+                        </button>
+                    </div>
+                </main>
+
+                <!-- Right Canvas Panel -->
+                <aside class="canvas-panel">
+                    <div class="canvas-content">
+                        <div class="empty-state-icon">
+                            <span class="emoji-large">📋</span>
+                        </div>
+                        <p class="empty-state-text">No Changes Available</p>
+                    </div>
+                </aside>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
