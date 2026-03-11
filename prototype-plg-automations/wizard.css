@@ -2089,3 +2089,140 @@ body {
     display: flex;
     align-items: center;
 }
+
+/* Integration Education Cards (Login Page) */
+.integration-education {
+    margin-top: 48px;
+    max-width: 900px;
+    width: 100%;
+}
+
+.education-title {
+    text-align: center;
+    font-size: 18px;
+    font-weight: 500;
+    color: #a1a1a1;
+    margin-bottom: 24px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.education-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+@media (max-width: 900px) {
+    .education-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+.education-card {
+    background: linear-gradient(135deg, #1a1c21 0%, #25272d 100%);
+    border: 1px solid #3a3d45;
+    border-radius: 16px;
+    padding: 24px;
+    transition: all 0.3s ease;
+}
+
+.education-card:hover {
+    transform: translateY(-4px);
+    border-color: #525252;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.education-card-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.education-card-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+/* GitHub card styling */
+.education-card.github-card .education-card-icon {
+    background: linear-gradient(135deg, #333 0%, #1a1a1a 100%);
+}
+
+.education-card.github-card .education-card-icon svg {
+    fill: white;
+}
+
+.education-card.github-card:hover {
+    border-color: #6e7681;
+}
+
+/* Slack card styling */
+.education-card.slack-card .education-card-icon {
+    background: linear-gradient(135deg, #4A154B 0%, #36C5F0 100%);
+}
+
+.education-card.slack-card .education-card-icon svg {
+    fill: white;
+}
+
+.education-card.slack-card:hover {
+    border-color: #4A154B;
+}
+
+/* Jira card styling */
+.education-card.jira-card .education-card-icon {
+    background: linear-gradient(135deg, #0052CC 0%, #2684FF 100%);
+}
+
+.education-card.jira-card .education-card-icon svg {
+    fill: white;
+}
+
+.education-card.jira-card:hover {
+    border-color: #0052CC;
+}
+
+.education-card-content h4 {
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 8px;
+}
+
+.education-card-content p {
+    font-size: 14px;
+    color: #a1a1a1;
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.education-card-content code {
+    background-color: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+}
+
+.education-features {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.education-features li {
+    font-size: 13px;
+    color: #d1d5db;
+    padding: 6px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.education-features li:first-child {
+    border-top: none;
+}
