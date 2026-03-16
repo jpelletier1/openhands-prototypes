@@ -31,7 +31,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
-        ...getHtmlEntries(resolve(__dirname, 'prototype-plg-automations'))
+        ...getHtmlEntries(resolve(__dirname, 'prototype-plg-automations')),
+        ...getHtmlEntries(resolve(__dirname, 'prototype-plg-automations-v2'))
       }
     }
   }
