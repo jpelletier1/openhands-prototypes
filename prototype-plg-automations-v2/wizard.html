@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenHands Setup Wizard</title>
+    <link rel="stylesheet" href="wizard.css">
+</head>
+<body>
+    <div class="wizard-container">
+        <!-- Left Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="emoji-logo">🤖</span>
+            </div>
+            <div class="sidebar-title">OpenHands</div>
+            
+            <!-- Main Navigation -->
+            <nav class="main-nav">
+                <div class="nav-item" data-nav="dashboard" onclick="navigateTo('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-label">Dashboard</span>
+                </div>
+                
+                <div class="nav-item active" data-nav="wizard">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-label">Automations</span>
+                    <span class="nav-arrow">▼</span>
+                </div>
+                
+                <!-- Wizard Sub-steps (shown when wizard is active) -->
+                <div class="wizard-substeps" id="wizard-substeps">
+                    <div class="progress-step active" data-step="1">
+                        <span class="step-number">1</span>
+                        <span class="step-label">Login</span>
+                    </div>
+                    <div class="progress-step" data-step="2">
+                        <span class="step-number">2</span>
+                        <span class="step-label">Profile</span>
+                    </div>
+                    <div class="progress-step" data-step="3">
+                        <span class="step-number">3</span>
+                        <span class="step-label">Integrations</span>
+                    </div>
+                    <div class="progress-step" data-step="4">
+                        <span class="step-number">4</span>
+                        <span class="step-label">Use Cases</span>
+                    </div>
+                    <div class="progress-step" data-step="5">
+                        <span class="step-number">5</span>
+                        <span class="step-label">Model</span>
+                    </div>
+                </div>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <a href="https://docs.openhands.dev" target="_blank" class="help-link">
+                    <span class="emoji-icon">❓</span>
+                    <span>Help</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Step 1: Login -->
+            <section class="wizard-step active" id="step-1">
+                <div class="step-content centered">
+                    <div class="step-header">
+                        <h1>Welcome to OpenHands</h1>
+                        <p>Connect your Git provider to get started</p>
+                    </div>
+                    
+                    <div class="login-buttons">
+                        <button class="provider-btn github" data-provider="github">
+                            <svg class="provider-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                            </svg>
+                            <span>Continue with GitHub</span>
+                        </button>
+                        
+                        <button class="provider-btn bitbucket" data-provider="bitbucket">
+                            <svg class="provider-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M.778 1.211a.768.768 0 00-.768.892l3.263 19.81c.084.5.515.868 1.022.873H19.95a.772.772 0 00.77-.646l3.27-20.03a.768.768 0 00-.768-.891zM14.52 15.53H9.522L8.17 8.466h7.561z"/>
+                            </svg>
+                            <span>Continue with Bitbucket</span>
+                        </button>
+                        
+                        <button class="provider-btn gitlab" data-provider="gitlab">
+                            <svg class="provider-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M23.955 13.587l-1.342-4.135-2.664-8.189a.455.455 0 00-.867 0L16.418 9.45H7.582L4.918 1.263a.455.455 0 00-.867 0L1.386 9.452.044 13.587a.924.924 0 00.331 1.023L12 23.054l11.625-8.443a.92.92 0 00.33-1.024"/>
+                            </svg>
+                            <span>Continue with GitLab</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Integration Education Cards -->
+                    <div class="integration-education">
+                        <h3 class="education-title">Powerful Integrations</h3>
+                        <div class="education-cards">
+                            <div class="education-card github-card">
+                                <div class="education-card-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                                    </svg>
+                                </div>
+                                <div class="education-card-content">
+                                    <h4>GitHub</h4>
+                                    <p>Use OpenHands on GitHub issues and PRs to automate tasks like vulnerability remediation, code reviews, and fixing CI failures.</p>
+                                    <ul class="education-features">
+                                        <li>🛡️ Vulnerability remediation</li>
+                                        <li>👀 AI-powered code reviews</li>
+                                        <li>🔧 CI failure fixes</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="education-card slack-card">
+                                <div class="education-card-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/>
+                                    </svg>
+                                </div>
+                                <div class="education-card-content">
+                                    <h4>Slack</h4>
+                                    <p>Mention OpenHands in Slack to summarize feedback, fix bugs, and triage incidents.</p>
+                                    <ul class="education-features">
+                                        <li>💬 Summarize feedback</li>
+                                        <li>🐛 Fix bugs</li>
+                                        <li>🚨 Triage incidents</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            
+                            <div class="education-card jira-card">
+                                <div class="education-card-icon">
+                                    <svg viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M11.571 11.513H0a5.218 5.218 0 0 0 5.232 5.215h2.13v2.057A5.215 5.215 0 0 0 12.575 24V12.518a1.005 1.005 0 0 0-1.005-1.005zm5.723-5.756H5.736a5.215 5.215 0 0 0 5.215 5.214h2.129v2.058a5.218 5.218 0 0 0 5.215 5.214V6.758a1.001 1.001 0 0 0-1.001-1.001zM23.013 0H11.455a5.215 5.215 0 0 0 5.215 5.215h2.129v2.057A5.215 5.215 0 0 0 24 12.483V1.005A1.005 1.005 0 0 0 23.013 0z"/>
+                                    </svg>
+                                </div>
+                                <div class="education-card-content">
+                                    <h4>Jira</h4>
+                                    <p>Use OpenHands on Jira issues to help decompose issues into smaller tasks, refine PRDs, or kickoff implementation.</p>
+                                    <ul class="education-features">
+                                        <li>🔀 Task decomposition</li>
+                                        <li>📝 PRD refinement</li>
+                                        <li>🚀 Kickoff implementation</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 2: Profile Questions -->
+            <section class="wizard-step" id="step-2">
+                <div class="step-content">
+                    <div class="step-header">
+                        <h1>Tell us about yourself</h1>
+                        <p>Help us personalize your experience</p>
+                    </div>
+                    
+                    <div class="questions-form">
+                        <div class="question-group">
+                            <label>What's your role?</label>
+                            <div class="option-buttons">
+                                <button class="option-btn" data-field="role" data-value="developer">Software Developer</button>
+                                <button class="option-btn" data-field="role" data-value="lead">Tech Lead</button>
+                                <button class="option-btn" data-field="role" data-value="manager">Engineering Manager</button>
+                                <button class="option-btn" data-field="role" data-value="architect">Architect</button>
+                                <button class="option-btn" data-field="role" data-value="devops">DevOps Engineer</button>
+                                <button class="option-btn" data-field="role" data-value="other">Other</button>
+                            </div>
+                        </div>
+                        
+                        <div class="question-group">
+                            <label>Are you evaluating OpenHands for...</label>
+                            <div class="option-buttons">
+                                <button class="option-btn" data-field="purpose" data-value="personal">Personal use</button>
+                                <button class="option-btn" data-field="purpose" data-value="org">Organizational initiative</button>
+                            </div>
+                        </div>
+                        
+                        <div class="question-group">
+                            <label>What size organization do you work for?</label>
+                            <div class="option-buttons">
+                                <button class="option-btn" data-field="orgSize" data-value="1-10">1-10 employees</button>
+                                <button class="option-btn" data-field="orgSize" data-value="11-50">11-50 employees</button>
+                                <button class="option-btn" data-field="orgSize" data-value="51-200">51-200 employees</button>
+                                <button class="option-btn" data-field="orgSize" data-value="201-1000">201-1000 employees</button>
+                                <button class="option-btn" data-field="orgSize" data-value="1000+">1000+ employees</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn-secondary" data-action="back">Back</button>
+                        <button class="btn-primary" data-action="next" disabled>Continue</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 3: Integrations -->
+            <section class="wizard-step" id="step-3">
+                <div class="step-content">
+                    <div class="step-header">
+                        <h1>Connect Integrations</h1>
+                        <p>Connect your tools to enable automation triggers and notifications</p>
+                    </div>
+                    
+                    <div class="integrations-grid">
+                        <div class="integration-card connected" data-integration="github">
+                            <div class="integration-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                                </svg>
+                            </div>
+                            <div class="integration-info">
+                                <h3>GitHub</h3>
+                                <p class="integration-status connected">✓ Connected</p>
+                            </div>
+                        </div>
+                        
+                        <div class="integration-card" data-integration="slack">
+                            <div class="integration-icon slack-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/>
+                                </svg>
+                            </div>
+                            <div class="integration-info">
+                                <h3>Slack</h3>
+                                <p class="integration-status">Not connected</p>
+                            </div>
+                            <button class="btn-connect" onclick="connectIntegration('slack')">Connect</button>
+                        </div>
+                        
+                        <div class="integration-card" data-integration="jira">
+                            <div class="integration-icon jira-icon">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M11.571 11.513H0a5.218 5.218 0 0 0 5.232 5.215h2.13v2.057A5.215 5.215 0 0 0 12.575 24V12.518a1.005 1.005 0 0 0-1.005-1.005zm5.723-5.756H5.736a5.215 5.215 0 0 0 5.215 5.214h2.129v2.058a5.218 5.218 0 0 0 5.215 5.214V6.758a1.001 1.001 0 0 0-1.001-1.001zM23.013 0H11.455a5.215 5.215 0 0 0 5.215 5.215h2.129v2.057A5.215 5.215 0 0 0 24 12.483V1.005A1.005 1.005 0 0 0 23.013 0z"/>
+                                </svg>
+                            </div>
+                            <div class="integration-info">
+                                <h3>Jira</h3>
+                                <p class="integration-status">Not connected</p>
+                            </div>
+                            <button class="btn-connect" onclick="connectIntegration('jira')">Connect</button>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn-secondary" data-action="back">Back</button>
+                        <button class="btn-primary" data-action="next">Continue</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Step 4: Use Case Selection -->
+            <section class="wizard-step" id="step-4">
+                <div class="step-content split-layout">
+                    <div class="step-header full-width">
+                        <h1>Configure Use Cases</h1>
+                        <p>Select and configure automations for your workflows</p>
+                    </div>
+                    
+                    <div class="split-container">
+                        <div class="use-cases-list">
+                            <button class="btn-new-usecase" onclick="openNewUseCaseModal()">
+                                <span class="plus-icon">+</span> New Use Case
+                            </button>
+                            
+                            <div class="use-case-item" data-usecase="prd-refinement">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>📝 PRD Refinement</h3>
+                                    <p class="use-case-trigger">Slash: <code>/prd-refinement</code></p>
+                                </div>
+                            </div>
+                            
+                            <div class="use-case-item" data-usecase="task-decomposition">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>🔀 Task Decomposition</h3>
+                                    <p class="use-case-trigger">Slash: <code>/decompose</code></p>
+                                </div>
+                            </div>
+                            
+                            <div class="use-case-item" data-usecase="pr-summary">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>📊 Weekly PR Summary</h3>
+                                    <p class="use-case-trigger">Slash: <code>/pr-summary</code></p>
+                                </div>
+                            </div>
+                            
+                            <div class="use-case-item" data-usecase="code-review">
+                                <div class="use-case-checkbox">
+                                    <span class="checkbox-icon">✓</span>
+                                </div>
+                                <div class="use-case-info">
+                                    <h3>👀 Code Review</h3>
+                                    <p class="use-case-trigger">Slash: <code>/pr-review</code></p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="use-case-details">
+                            <div class="details-placeholder">
+                                <span class="emoji-large">👈</span>
+                                <p>Select a use case to configure triggers</p>
+                            </div>
+                            
+                            <div class="details-content" id="details-prd-refinement" style="display: none;">
+                                <h2>📝 PRD Refinement</h2>
+                                <p class="detail-description">Automatically analyze and refine Product Requirements Documents by identifying gaps, suggesting improvements, and adding technical specifications.</p>
+                                
+                                <div class="detail-section">
+                                    <h4>Repos:</h4>
+                                    <select class="repo-select" data-usecase="prd-refinement">
+                                        <option value="">Select a repository...</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="detail-section run-mode-section">
+                                    <h4>Run Mode:</h4>
+                                    <div class="run-mode-toggle">
+                                        <button class="run-mode-btn active" data-usecase="prd-refinement" data-mode="trigger" onclick="setRunMode('prd-refinement', 'trigger')">
+                                            <span class="run-mode-icon">⚡</span>
+                                            <span>Run on Trigger</span>
+                                        </button>
+                                        <button class="run-mode-btn" data-usecase="prd-refinement" data-mode="schedule" onclick="setRunMode('prd-refinement', 'schedule')">
+                                            <span class="run-mode-icon">📅</span>
+                                            <span>Run on Schedule</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Trigger Configuration -->
+                                <div class="trigger-config-section" id="trigger-config-prd-refinement">
+                                    <div class="detail-section">
+                                        <div class="trigger-config">
+                                            <div class="form-group">
+                                                <label>Integration</label>
+                                                <select class="integration-select" data-usecase="prd-refinement" onchange="updateTriggerOptionsForUseCase('prd-refinement')">
+                                                    <option value="github">GitHub</option>
+                                                    <option value="jira">Jira</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Trigger</label>
+                                                <div class="trigger-options-dynamic" id="triggers-prd-refinement">
+                                                    <!-- Populated by JavaScript -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Schedule Configuration -->
+                                <div class="schedule-config-section" id="schedule-config-prd-refinement" style="display: none;">
+                                    <div class="detail-section">
+                                        <div class="schedule-config" id="schedule-picker-prd-refinement">
+                                            <!-- Populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="details-content" id="details-task-decomposition" style="display: none;">
+                                <h2>🔀 Task Decomposition</h2>
+                                <p class="detail-description">Break down complex issues into smaller, actionable tasks. Perfect for taking high-level features and creating implementation subtasks.</p>
+                                
+                                <div class="detail-section">
+                                    <h4>Repos:</h4>
+                                    <select class="repo-select" data-usecase="task-decomposition">
+                                        <option value="">Select a repository...</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="detail-section run-mode-section">
+                                    <h4>Run Mode:</h4>
+                                    <div class="run-mode-toggle">
+                                        <button class="run-mode-btn active" data-usecase="task-decomposition" data-mode="trigger" onclick="setRunMode('task-decomposition', 'trigger')">
+                                            <span class="run-mode-icon">⚡</span>
+                                            <span>Run on Trigger</span>
+                                        </button>
+                                        <button class="run-mode-btn" data-usecase="task-decomposition" data-mode="schedule" onclick="setRunMode('task-decomposition', 'schedule')">
+                                            <span class="run-mode-icon">📅</span>
+                                            <span>Run on Schedule</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Trigger Configuration -->
+                                <div class="trigger-config-section" id="trigger-config-task-decomposition">
+                                    <div class="detail-section">
+                                        <div class="trigger-config">
+                                            <div class="form-group">
+                                                <label>Integration</label>
+                                                <select class="integration-select" data-usecase="task-decomposition" onchange="updateTriggerOptionsForUseCase('task-decomposition')">
+                                                    <option value="github">GitHub</option>
+                                                    <option value="jira">Jira</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Trigger</label>
+                                                <div class="trigger-options-dynamic" id="triggers-task-decomposition">
+                                                    <!-- Populated by JavaScript -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Schedule Configuration -->
+                                <div class="schedule-config-section" id="schedule-config-task-decomposition" style="display: none;">
+                                    <div class="detail-section">
+                                        <div class="schedule-config" id="schedule-picker-task-decomposition">
+                                            <!-- Populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="details-content" id="details-pr-summary" style="display: none;">
+                                <h2>📊 Weekly PR Summary</h2>
+                                <p class="detail-description">Get a comprehensive summary of all PRs, reviews, and merge activity posted to your Slack channel on a regular schedule.</p>
+                                
+                                <div class="detail-section">
+                                    <h4>Repos:</h4>
+                                    <select class="repo-select" data-usecase="pr-summary">
+                                        <option value="">Select a repository...</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="detail-section run-mode-section">
+                                    <h4>Run Mode:</h4>
+                                    <div class="run-mode-toggle">
+                                        <button class="run-mode-btn active" data-usecase="pr-summary" data-mode="trigger" onclick="setRunMode('pr-summary', 'trigger')">
+                                            <span class="run-mode-icon">⚡</span>
+                                            <span>Run on Trigger</span>
+                                        </button>
+                                        <button class="run-mode-btn" data-usecase="pr-summary" data-mode="schedule" onclick="setRunMode('pr-summary', 'schedule')">
+                                            <span class="run-mode-icon">📅</span>
+                                            <span>Run on Schedule</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Trigger Configuration -->
+                                <div class="trigger-config-section" id="trigger-config-pr-summary">
+                                    <div class="detail-section">
+                                        <div class="trigger-config">
+                                            <div class="form-group">
+                                                <label>Integration</label>
+                                                <select class="integration-select" data-usecase="pr-summary" onchange="updateTriggerOptionsForUseCase('pr-summary')">
+                                                    <option value="github">GitHub</option>
+                                                    <option value="jira">Jira</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Trigger</label>
+                                                <div class="trigger-options-dynamic" id="triggers-pr-summary">
+                                                    <!-- Populated by JavaScript -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Schedule Configuration -->
+                                <div class="schedule-config-section" id="schedule-config-pr-summary" style="display: none;">
+                                    <div class="detail-section">
+                                        <div class="schedule-config" id="schedule-picker-pr-summary">
+                                            <!-- Populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="details-content" id="details-code-review" style="display: none;">
+                                <h2>👀 Code Review</h2>
+                                <p class="detail-description">Perform comprehensive code reviews on pull requests, identifying issues, suggesting improvements, and ensuring code quality standards.</p>
+                                
+                                <div class="detail-section">
+                                    <h4>Repos:</h4>
+                                    <select class="repo-select" data-usecase="code-review">
+                                        <option value="">Select a repository...</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="detail-section run-mode-section">
+                                    <h4>Run Mode:</h4>
+                                    <div class="run-mode-toggle">
+                                        <button class="run-mode-btn active" data-usecase="code-review" data-mode="trigger" onclick="setRunMode('code-review', 'trigger')">
+                                            <span class="run-mode-icon">⚡</span>
+                                            <span>Run on Trigger</span>
+                                        </button>
+                                        <button class="run-mode-btn" data-usecase="code-review" data-mode="schedule" onclick="setRunMode('code-review', 'schedule')">
+                                            <span class="run-mode-icon">📅</span>
+                                            <span>Run on Schedule</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Trigger Configuration -->
+                                <div class="trigger-config-section" id="trigger-config-code-review">
+                                    <div class="detail-section">
+                                        <div class="trigger-config">
+                                            <div class="form-group">
+                                                <label>Integration</label>
+                                                <select class="integration-select" data-usecase="code-review" onchange="updateTriggerOptionsForUseCase('code-review')">
+                                                    <option value="github">GitHub</option>
+                                                    <option value="jira">Jira</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label>Trigger</label>
+                                                <div class="trigger-options-dynamic" id="triggers-code-review">
+                                                    <!-- Populated by JavaScript -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Schedule Configuration -->
+                                <div class="schedule-config-section" id="schedule-config-code-review" style="display: none;">
+                                    <div class="detail-section">
+                                        <div class="schedule-config" id="schedule-picker-code-review">
+                                            <!-- Populated by JavaScript -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions full-width">
+                        <button class="btn-secondary" data-action="back">Back</button>
+                        <button class="btn-primary" data-action="next" disabled>Continue</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- New Use Case Modal -->
+            <div class="modal-overlay" id="new-usecase-modal" style="display: none;">
+                <div class="modal-content large">
+                    <div class="modal-header">
+                        <h2>Create Custom Use Case</h2>
+                        <button class="modal-close" onclick="closeNewUseCaseModal()">✕</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Use Case Name</label>
+                            <input type="text" id="custom-usecase-name" placeholder="e.g., Vulnerability Remediation">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Action Type</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="action-type" value="plugin" checked onchange="toggleActionType()">
+                                    <span>Load Plugin</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="action-type" value="prompt" onchange="toggleActionType()">
+                                    <span>Custom Prompt</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" id="plugin-input-group">
+                            <label>Plugin Path</label>
+                            <div class="plugin-path-input">
+                                <input type="text" id="plugin-path" value="github.com/OpenHands/extensions/plugins/vulnerability-remediation" placeholder="github.com/org/repo/plugins/name">
+                                <button class="btn-secondary" onclick="loadPlugin()">Load Plugin</button>
+                            </div>
+                            <div id="plugin-status" class="plugin-status"></div>
+                        </div>
+                        
+                        <div class="form-group" id="prompt-input-group" style="display: none;">
+                            <label>Custom Prompt</label>
+                            <textarea id="custom-prompt" rows="6" placeholder="Enter your custom prompt instructions..."></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Trigger Type</label>
+                            <div class="radio-group">
+                                <label class="radio-option">
+                                    <input type="radio" name="trigger-type" value="event" checked onchange="toggleTriggerType()">
+                                    <span>Event Trigger</span>
+                                </label>
+                                <label class="radio-option">
+                                    <input type="radio" name="trigger-type" value="schedule" onchange="toggleTriggerType()">
+                                    <span>Schedule</span>
+                                </label>
+                            </div>
+                        </div>
+                        
+                        <div id="event-trigger-group">
+                            <div class="form-group">
+                                <label>Platform</label>
+                                <select id="trigger-platform" onchange="updateTriggerEvents()">
+                                    <option value="jira">Jira</option>
+                                    <option value="github">GitHub</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Event</label>
+                                <select id="trigger-event">
+                                    <option value="new-issue">New Issue</option>
+                                    <option value="issue-comment">Issue Comment</option>
+                                    <option value="issue-updated">Issue Updated</option>
+                                    <option value="label-added">Label Added</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group" id="label-input-group" style="display: none;">
+                                <label>Label Name</label>
+                                <input type="text" id="trigger-label" placeholder="e.g., openhands:run">
+                            </div>
+                        </div>
+                        
+                        <div id="schedule-trigger-group" style="display: none;">
+                            <div class="form-group">
+                                <label>Run Every</label>
+                                <div class="schedule-picker">
+                                    <select id="schedule-day">
+                                        <option value="daily">Daily</option>
+                                        <option value="monday">Every Monday</option>
+                                        <option value="tuesday">Every Tuesday</option>
+                                        <option value="wednesday">Every Wednesday</option>
+                                        <option value="thursday">Every Thursday</option>
+                                        <option value="friday">Every Friday</option>
+                                        <option value="saturday">Every Saturday</option>
+                                        <option value="sunday">Every Sunday</option>
+                                    </select>
+                                    <span>at</span>
+                                    <input type="time" id="schedule-time" value="09:00">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn-secondary" onclick="closeNewUseCaseModal()">Cancel</button>
+                        <button class="btn-primary" onclick="saveCustomUseCase()">Create Use Case</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Model Selection -->
+            <section class="wizard-step" id="step-5">
+                <div class="step-content">
+                    <div class="step-header">
+                        <h1>Select LLM Provider</h1>
+                        <p>Choose how you want to power the AI agents</p>
+                    </div>
+                    
+                    <div class="model-options">
+                        <div class="model-card" data-model="openhands">
+                            <div class="model-header">
+                                <span class="model-icon">🤖</span>
+                                <h3>OpenHands LLM Provider</h3>
+                            </div>
+                            <p>Use OpenHands-managed AI models with pay-per-use pricing</p>
+                            <ul class="model-features">
+                                <li>✓ No API key needed</li>
+                                <li>✓ Optimized for coding tasks</li>
+                                <li>✓ Simple billing</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="model-card" data-model="byok">
+                            <div class="model-header">
+                                <span class="model-icon">🔑</span>
+                                <h3>Bring Your Own Key</h3>
+                            </div>
+                            <p>Use your existing OpenAI, Anthropic, or other LLM provider</p>
+                            <div class="byok-input" style="display: none;">
+                                <select id="provider-select">
+                                    <option value="">Select provider...</option>
+                                    <option value="openai">OpenAI</option>
+                                    <option value="anthropic">Anthropic</option>
+                                    <option value="google">Google AI</option>
+                                    <option value="azure">Azure OpenAI</option>
+                                </select>
+                                <input type="password" id="api-key-input" placeholder="Enter your API key">
+                            </div>
+                        </div>
+                        
+                        <div class="model-card promo" data-model="credits">
+                            <div class="promo-badge">🎁 Special Offer</div>
+                            <div class="model-header">
+                                <span class="model-icon">💰</span>
+                                <h3>Get $50 Free Credits</h3>
+                            </div>
+                            <p>Try OpenHands LLM Provider risk-free with $50 in credits</p>
+                            <div class="credits-input" style="display: none;">
+                                <input type="email" id="business-email" placeholder="Enter your business email">
+                                <p class="credits-note">Business email required (no gmail, yahoo, etc.)</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn-secondary" data-action="back">Back</button>
+                        <button class="btn-primary" data-action="next" disabled>Continue</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Setup Complete Page (shown after Model selection) -->
+            <section class="wizard-step" id="setup-complete">
+                <div class="step-content centered">
+                    <div class="tutorial-container">
+                        <div class="step-header">
+                            <h1>🎉 Setup Complete!</h1>
+                            <p>Your automations are ready to use</p>
+                        </div>
+                        
+                        <div class="tutorial-content">
+                            <h2>How to Use Your Automations</h2>
+                            <p class="tutorial-subtitle">Share these documentation links with your team to help them get started</p>
+                            <div class="tutorial-cards" id="tutorial-cards">
+                                <!-- Tutorial cards will be populated by JavaScript -->
+                            </div>
+                        </div>
+                        
+                        <div class="step-actions">
+                            <button class="btn-primary large" onclick="navigateTo('dashboard')">
+                                Go to Dashboard
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Dashboard View (not a wizard step) -->
+            <section class="wizard-step" id="dashboard-view">
+                <div class="step-content">
+                    <!-- Not Setup View -->
+                    <div id="not-setup-view" style="display: none;">
+                        <div class="step-content centered">
+                            <div class="not-setup-container">
+                                <span class="not-setup-icon">🚀</span>
+                                <h1>Welcome to OpenHands</h1>
+                                <p>You haven't set up any use cases yet. Get started by installing AI-powered workflows into your repositories.</p>
+                                <div class="not-setup-features">
+                                    <div class="feature-item">
+                                        <span>🐛</span>
+                                        <span>Automatic Bug Fixing</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span>👀</span>
+                                        <span>AI Code Reviews</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span>🔧</span>
+                                        <span>CI Failure Remediation</span>
+                                    </div>
+                                    <div class="feature-item">
+                                        <span>📦</span>
+                                        <span>Dependency Upgrades</span>
+                                    </div>
+                                </div>
+                                <button class="btn-primary large" onclick="navigateTo('wizard')">
+                                    Configure Automations
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Cloud Monitoring View -->
+                    <div id="cloud-monitoring-view">
+                        <div class="step-header">
+                            <h1>📊 Monitoring Dashboard</h1>
+                            <p>Track your OpenHands agent activity and usage</p>
+                        </div>
+                        
+                        <!-- Stats Cards -->
+                        <div class="stats-cards">
+                            <div class="stat-card">
+                                <div class="stat-icon">💬</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">247</div>
+                                    <div class="stat-label">Total Conversations</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">⏰</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">18</div>
+                                    <div class="stat-label">Conversations (24h)</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">🔀</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">89</div>
+                                    <div class="stat-label">OpenHands-assisted PRs</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">💰</div>
+                                <div class="stat-info">
+                                    <div class="stat-value">$0.42</div>
+                                    <div class="stat-label">Avg Cost per Task</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Rankings Section -->
+                        <div class="rankings-section">
+                            <div class="ranking-card">
+                                <h3>📁 Conversations by Repository</h3>
+                                <div class="ranking-list" id="repo-rankings">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
+                            <div class="ranking-card">
+                                <h3>🎯 Top Use Cases by Conversations</h3>
+                                <div class="ranking-list" id="usecase-rankings">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Chart Section -->
+                        <div class="chart-section">
+                            <h3>📈 Daily Conversations (Last 30 Days)</h3>
+                            <div class="chart-container">
+                                <div class="chart-bars" id="conversation-chart">
+                                    <!-- Populated by JavaScript -->
+                                </div>
+                                <div class="chart-labels">
+                                    <span>30d ago</span>
+                                    <span>20d ago</span>
+                                    <span>10d ago</span>
+                                    <span>Today</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-actions dashboard-actions">
+                            <button class="btn-secondary" onclick="navigateTo('wizard'); setTimeout(() => goToStep(4), 100);">
+                                <span>⚙️</span> Add More Automations
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Enterprise Configuration Modal -->
+    <div class="modal-overlay" id="enterprise-modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>OpenHands Enterprise Configuration</h2>
+                <button class="modal-close" onclick="closeEnterpriseModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="enterprise-hostname">Hostname</label>
+                    <input type="text" id="enterprise-hostname" placeholder="e.g., openhands.yourcompany.com">
+                </div>
+                <div class="form-group">
+                    <label for="enterprise-api-key">API Key</label>
+                    <input type="password" id="enterprise-api-key" placeholder="Enter your API key">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeEnterpriseModal()">Cancel</button>
+                <button class="btn-primary" onclick="saveEnterpriseConfig()">Save Configuration</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="wizard.js"></script>
+</body>
+</html>
