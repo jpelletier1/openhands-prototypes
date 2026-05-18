@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI-Enabled SDLC | OpenHands Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-sidebar: #FAF8F4;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --text-muted: #6b7280;
+            --accent-yellow: #FFE81D;
+            --border-color: #e5e7eb;
+            --code-bg: #1f2937;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        /* Layout */
+        .layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-header a {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .sidebar-header .logo-icon {
+            font-size: 1.25rem;
+        }
+
+        .sidebar-nav h3 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .sidebar-nav h3:first-child {
+            margin-top: 0;
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0.25rem;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 0.5rem 0.75rem;
+            border-radius: 6px;
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            transition: all 0.15s;
+        }
+
+        .sidebar-nav a:hover {
+            background: rgba(0,0,0,0.05);
+            color: var(--text-primary);
+        }
+
+        .sidebar-nav a.active {
+            background: var(--accent-yellow);
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Main Content */
+        .main {
+            flex: 1;
+            margin-left: 280px;
+            min-width: 0;
+        }
+
+        .content {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 4rem;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: -0.025em;
+        }
+
+        .page-description {
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 3rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-top: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: var(--text-secondary);
+        }
+
+        /* SDLC Process */
+        .sdlc-process {
+            display: flex;
+            gap: 0;
+            margin: 2rem 0;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            padding: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .sdlc-step {
+            flex: 1;
+            min-width: 120px;
+            padding: 1rem;
+            text-align: center;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .sdlc-step:hover {
+            background: rgba(255,255,255,0.8);
+        }
+
+        .sdlc-step.active {
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .sdlc-step .step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 0.5rem;
+        }
+
+        .sdlc-step[data-phase="feedback"] .step-icon { background: #fef2f2; color: #ef4444; }
+        .sdlc-step[data-phase="planning"] .step-icon { background: #f0fdfa; color: #0d9488; }
+        .sdlc-step[data-phase="design"] .step-icon { background: #f5f3ff; color: #7c3aed; }
+        .sdlc-step[data-phase="coding"] .step-icon { background: #fffbeb; color: #d97706; }
+        .sdlc-step[data-phase="testing"] .step-icon { background: #ecfdf5; color: #059669; }
+        .sdlc-step[data-phase="release"] .step-icon { background: #eff6ff; color: #2563eb; }
+
+        .sdlc-step .step-name {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .sdlc-step .step-count {
+            font-size: 0.6875rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        .sdlc-step.active .step-name {
+            color: var(--text-primary);
+        }
+
+        /* Arrow between steps */
+        .sdlc-step:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            right: -8px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.875rem;
+            z-index: 1;
+        }
+
+        /* Jobs List */
+        .jobs-section {
+            margin-top: 2rem;
+        }
+
+        .jobs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .jobs-header h3 {
+            margin: 0;
+        }
+
+        .phase-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .phase-badge.feedback { background: #fef2f2; color: #dc2626; }
+        .phase-badge.planning { background: #f0fdfa; color: #0f766e; }
+        .phase-badge.design { background: #f5f3ff; color: #6d28d9; }
+        .phase-badge.coding { background: #fffbeb; color: #b45309; }
+        .phase-badge.testing { background: #ecfdf5; color: #047857; }
+        .phase-badge.release { background: #eff6ff; color: #1d4ed8; }
+
+        .jobs-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .job-item {
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.25rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .job-item:hover {
+            border-color: #d1d5db;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        .job-item.active {
+            border-color: var(--text-primary);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .job-item-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .job-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 1.25rem;
+        }
+
+        .job-item[data-phase="feedback"] .job-icon { background: #fef2f2; }
+        .job-item[data-phase="planning"] .job-icon { background: #f0fdfa; }
+        .job-item[data-phase="design"] .job-icon { background: #f5f3ff; }
+        .job-item[data-phase="coding"] .job-icon { background: #fffbeb; }
+        .job-item[data-phase="testing"] .job-icon { background: #ecfdf5; }
+        .job-item[data-phase="release"] .job-icon { background: #eff6ff; }
+
+        .job-item-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .job-item-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .job-item-description {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin: 0;
+            line-height: 1.5;
+        }
+
+        .job-item-arrow {
+            color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+
+        .job-item:hover .job-item-arrow {
+            transform: translateX(4px);
+        }
+
+        /* Side Panel */
+        .panel-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .panel-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .side-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 560px;
+            max-width: 100vw;
+            height: 100vh;
+            background: var(--bg-primary);
+            z-index: 1001;
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .side-panel.open {
+            transform: translateX(0);
+        }
+
+        .panel-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .panel-title-section {
+            flex: 1;
+        }
+
+        .panel-phase {
+            margin-bottom: 0.5rem;
+        }
+
+        .panel-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .panel-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.125rem;
+            color: var(--text-muted);
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        .panel-close:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .panel-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .panel-section {
+            margin-bottom: 2rem;
+        }
+
+        .panel-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .panel-section-title {
+            font-size: 0.6875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+
+        .panel-section-content {
+            font-size: 0.9375rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .panel-section-content ul {
+            padding-left: 1.25rem;
+            margin: 0;
+        }
+
+        .panel-section-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .outcome-box {
+            background: linear-gradient(135deg, #fef9c3 0%, #fef3c7 100%);
+            border: 1px solid #fde047;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .outcome-box p {
+            margin: 0;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        /* Config Steps */
+        .config-steps {
+            background: var(--bg-secondary);
+            border-radius: 10px;
+            padding: 1.25rem;
+        }
+
+        .config-step {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .config-step:last-child {
+            margin-bottom: 0;
+        }
+
+        .step-number {
+            width: 24px;
+            height: 24px;
+            background: var(--accent-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-content p {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin-top: 0.75rem;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8125rem;
+            line-height: 1.6;
+            color: #e5e7eb;
+        }
+
+        .code-block .comment { color: #6b7280; }
+        .code-block .keyword { color: #f472b6; }
+        .code-block .string { color: #86efac; }
+        .code-block .function { color: #fbbf24; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-muted);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                display: none;
+            }
+            .main {
+                margin-left: 0;
+            }
+            .content {
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .sdlc-process {
+                flex-wrap: wrap;
+            }
+            .sdlc-step {
+                min-width: calc(33.33% - 0.5rem);
+            }
+            .sdlc-step:not(:last-child)::after {
+                display: none;
+            }
+            .side-panel {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <a href="https://www.openhands.dev">
+                    <span class="logo-icon">👋</span>
+                    OpenHands
+                </a>
+            </div>
+            <nav class="sidebar-nav">
+                <h3>Documentation</h3>
+                <ul>
+                    <li><a href="https://docs.openhands.dev">Getting Started</a></li>
+                    <li><a href="#" class="active">AI-Enabled SDLC</a></li>
+                    <li><a href="https://docs.openhands.dev/sdk">SDK Reference</a></li>
+                </ul>
+                <h3>SDLC Phases</h3>
+                <ul>
+                    <li><a href="#" onclick="selectPhase('feedback'); return false;">Feedback</a></li>
+                    <li><a href="#" onclick="selectPhase('planning'); return false;">Planning</a></li>
+                    <li><a href="#" onclick="selectPhase('design'); return false;">Design</a></li>
+                    <li><a href="#" onclick="selectPhase('coding'); return false;">Coding</a></li>
+                    <li><a href="#" onclick="selectPhase('testing'); return false;">Testing</a></li>
+                    <li><a href="#" onclick="selectPhase('release'); return false;">Release</a></li>
+                </ul>
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="https://app.all-hands.dev">Try OpenHands</a></li>
+                    <li><a href="https://github.com/OpenHands/OpenHands">GitHub</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main">
+            <div class="content">
+                <h1>AI-Enabled Software Development Lifecycle</h1>
+                <p class="page-description">
+                    Transform your development workflow with AI agents at every stage. Click on a phase below to explore automation opportunities, then select a job to see implementation details.
+                </p>
+
+                <!-- SDLC Process -->
+                <div class="sdlc-process" id="sdlcProcess">
+                    <div class="sdlc-step active" data-phase="all" onclick="selectPhase('all')">
+                        <div class="step-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+                        </div>
+                        <div class="step-name">All Phases</div>
+                        <div class="step-count">6 jobs</div>
+                    </div>
+                    <div class="sdlc-step" data-phase="feedback" onclick="selectPhase('feedback')">
+                        <div class="step-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                        </div>
+                        <div class="step-name">Feedback</div>
+                        <div class="step-count">1 job</div>
+                    </div>
+                    <div class="sdlc-step" data-phase="planning" onclick="selectPhase('planning')">
+                        <div class="step-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1"></rect></svg>
+                        </div>
+                        <div class="step-name">Planning</div>
+                        <div class="step-count">1 job</div>
+                    </div>
+                    <div class="sdlc-step" data-phase="design" onclick="selectPhase('design')">
+                        <div class="step-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"></circle><circle cx="17.5" cy="10.5" r=".5"></circle><circle cx="8.5" cy="7.5" r=".5"></circle><circle cx="6.5" cy="12.5" r=".5"></circle><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.555C21.965 6.012 17.461 2 12 2z"></path></svg>
+                        </div>
+                        <div class="step-name">Design</div>
+                        <div class="step-count">1 job</div>
+                    </div>
+                    <div class="sdlc-step" data-phase="coding" onclick="selectPhase('coding')">
+                        <div class="step-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                        </div>
+                        <div class="step-name">Coding</div>
+                        <div class="step-count">1 job</div>
+                    </div>
+                    <div class="sdlc-step" data-phase="testing" onclick="selectPhase('testing')">
+                        <div class="step-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+                        </div>
+                        <div class="step-name">Testing</div>
+                        <div class="step-count">1 job</div>
+                    </div>
+                    <div class="sdlc-step" data-phase="release" onclick="selectPhase('release')">
+                        <div class="step-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path></svg>
+                        </div>
+                        <div class="step-name">Release</div>
+                        <div class="step-count">1 job</div>
+                    </div>
+                </div>
+
+                <!-- Jobs Section -->
+                <div class="jobs-section" id="jobsSection">
+                    <div class="jobs-header">
+                        <h3 id="jobsTitle">All Jobs</h3>
+                        <span class="phase-badge" id="phaseBadge" style="display: none;"></span>
+                    </div>
+                    <div class="jobs-list" id="jobsList">
+                        <!-- Jobs will be inserted here -->
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Panel Overlay -->
+    <div class="panel-overlay" id="panelOverlay" onclick="closePanel()"></div>
+
+    <!-- Side Panel -->
+    <div class="side-panel" id="sidePanel">
+        <div class="panel-header">
+            <div class="panel-title-section">
+                <div class="panel-phase" id="panelPhase"></div>
+                <h2 class="panel-title" id="panelTitle"></h2>
+            </div>
+            <button class="panel-close" onclick="closePanel()">×</button>
+        </div>
+        <div class="panel-body" id="panelBody">
+            <!-- Content will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        // Jobs data
+        const jobs = [
+            {
+                id: 'sales-feedback',
+                phase: 'feedback',
+                icon: '📥',
+                title: 'Create Issues from Sales Feedback',
+                description: 'Transform Slack conversations into actionable GitHub or Jira issues with automatic design tagging.',
+                context: 'Sales and customer success teams constantly receive valuable product feedback through Slack conversations. This feedback often gets lost or never makes it to the product backlog in a structured way.',
+                motivation: [
+                    'Customer feedback is scattered across Slack channels',
+                    'Manual issue creation is time-consuming and inconsistent',
+                    'Important feature requests often get lost or delayed',
+                    'Design team needs early visibility into UI/UX requirements'
+                ],
+                outcome: 'Every piece of customer feedback is automatically converted into a well-structured issue with proper categorization, priority signals, and design-needed tags when UI changes are involved.',
+                steps: [
+                    { title: 'Create a Slack Trigger', desc: 'Set up automation for messages in #customer-feedback or with 🎫 emoji reactions' },
+                    { title: 'Configure Agent Prompt', desc: 'Define how the agent analyzes feedback and determines if design involvement is needed' },
+                    { title: 'Connect to GitHub/Jira', desc: 'Link your issue tracker and define the target project/repository' },
+                    { title: 'Set Auto-Tagging Rules', desc: 'Configure rules for applying design-needed label based on content analysis' }
+                ],
+                code: `# Agent Canvas Configuration
+
+trigger:
+  type: slack
+  channel: "#customer-feedback"
+  reactions: ["🎫", "feature"]
+
+agent:
+  task: |
+    Analyze customer feedback and create an issue:
+    1. Extract the core feature request or bug
+    2. Determine priority from urgency signals
+    3. Check if UI/UX changes are mentioned
+    4. Create issue with design-needed label if applicable
+  
+  output:
+    type: github_issue
+    repo: "myorg/product"
+    labels: ["customer-feedback"]
+    notify: slack_thread`
+            },
+            {
+                id: 'plan-to-pr',
+                phase: 'planning',
+                icon: '🔄',
+                title: 'Plan to Pull Request',
+                description: 'Auto-generate technical implementation plans from issues, then transform approved plans into working PRs.',
+                context: 'When new issues are created, they typically require technical planning before implementation. This planning phase can bottleneck development if architects are overloaded.',
+                motivation: [
+                    'Technical planning is often a bottleneck',
+                    'Junior developers may struggle with implementation approach',
+                    'Consistent plans improve code review efficiency',
+                    'Automated implementation handles routine tasks'
+                ],
+                outcome: 'New issues automatically receive a technical implementation plan as a comment. When approved, an agent implements the plan and opens a draft PR for review.',
+                steps: [
+                    { title: 'Set Up Issue Trigger', desc: 'Create automation for issues labeled "ready-for-planning"' },
+                    { title: 'Configure Planning Agent', desc: 'Agent analyzes issue, explores codebase, proposes implementation plan' },
+                    { title: 'Add Approval Gate', desc: 'Wait for maintainer to add "plan-approved" label' },
+                    { title: 'Implementation Agent', desc: 'Second agent implements approved plan and opens draft PR' }
+                ],
+                code: `# .github/workflows/plan-to-pr.yml
+
+name: Plan to PR Pipeline
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  generate-plan:
+    if: github.event.label.name == 'ready-for-planning'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: openhands/agent-action@v1
+        with:
+          task: |
+            Analyze issue #\${{ github.event.issue.number }}
+            and create a technical implementation plan
+          output: issue-comment
+
+  implement:
+    if: github.event.label.name == 'plan-approved'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: openhands/agent-action@v1
+        with:
+          task: |
+            Implement the approved plan for
+            issue #\${{ github.event.issue.number }}
+          output: pull-request
+          draft: true`
+            },
+            {
+                id: 'design-docs',
+                phase: 'design',
+                icon: '📝',
+                title: 'Auto-Generate Design Docs',
+                description: 'When issues are tagged design-needed, automatically draft technical design documents with architecture recommendations.',
+                context: 'Significant features require design documents (RFCs) outlining the approach before implementation. Writing these is time-consuming and often becomes a bottleneck.',
+                motivation: [
+                    'Design documents ensure alignment before coding',
+                    'Writing design docs is time-consuming',
+                    'Inconsistent documentation formats across teams',
+                    'Important architectural decisions need to be recorded'
+                ],
+                outcome: 'Issues tagged with design-needed automatically receive a draft design document PR with architecture recommendations, trade-offs, and open questions for team review.',
+                steps: [
+                    { title: 'Trigger on Label', desc: 'Set up automation when "design-needed" label is added to an issue' },
+                    { title: 'Codebase Analysis', desc: 'Agent explores repository to understand existing architecture' },
+                    { title: 'Generate RFC Document', desc: 'Create design doc following your team\'s RFC template' },
+                    { title: 'Create PR with Doc', desc: 'Open a PR adding the design doc to /docs/rfcs/' }
+                ],
+                code: `# Design Doc Template Generated
+
+# RFC: [Feature Name]
+
+## Summary
+Brief description of the proposed change.
+
+## Motivation
+Why are we doing this? What problem does it solve?
+
+## Detailed Design
+
+### Architecture Overview
+[Diagram and explanation]
+
+### API Changes
+[New endpoints or interface changes]
+
+### Data Model
+[Database schema changes]
+
+## Alternatives Considered
+What other approaches were evaluated?
+
+## Trade-offs
+What are we giving up with this approach?
+
+## Open Questions
+- Question 1 that needs team input
+- Question 2 about edge cases`
+            },
+            {
+                id: 'code-review',
+                phase: 'coding',
+                icon: '🔍',
+                title: 'Automated PR Review',
+                description: 'Run intelligent code reviews on every PR, checking for bugs, security issues, and best practices.',
+                context: 'Code reviews are essential for quality but can be a bottleneck. An AI-powered first pass catches common issues before human reviewers spend time on mechanical checks.',
+                motivation: [
+                    'Human reviewers spend time on mechanical checks',
+                    'Inconsistent review quality across the team',
+                    'Security and performance issues sometimes slip through',
+                    'Long review queues slow down deployment velocity'
+                ],
+                outcome: 'Every PR receives an immediate automated review with inline comments for bugs, security concerns, and code style—allowing human reviewers to focus on architecture and business logic.',
+                steps: [
+                    { title: 'Set Up PR Trigger', desc: 'Configure automation on pull_request opened and synchronize events' },
+                    { title: 'Define Review Criteria', desc: 'Specify checks: bugs, security, performance, style' },
+                    { title: 'Configure Comment Style', desc: 'Set severity levels and comment formatting' },
+                    { title: 'Enable Suggestions', desc: 'Allow agent to propose code changes as GitHub suggestions' }
+                ],
+                code: `# Review Checklist Configuration
+
+review_criteria:
+  security:
+    - SQL injection vulnerabilities
+    - XSS attack vectors  
+    - Hardcoded secrets or credentials
+    - Insecure dependencies
+
+  performance:
+    - N+1 query patterns
+    - Missing database indexes
+    - Unnecessary re-renders
+    - Memory leaks
+
+  code_quality:
+    - Dead code or unused imports
+    - Missing error handling
+    - Inconsistent naming conventions
+    - Missing or incorrect types
+
+  best_practices:
+    - Test coverage for new code
+    - Documentation for public APIs
+    - Breaking change detection`
+            },
+            {
+                id: 'vulnerability',
+                phase: 'testing',
+                icon: '🛡️',
+                title: 'Vulnerability Remediation',
+                description: 'Weekly automated scans detect CVEs and generate fix PRs to keep dependencies secure.',
+                context: 'Software dependencies frequently have security vulnerabilities. Keeping dependencies updated is critical but often falls behind due to other priorities.',
+                motivation: [
+                    'New CVEs are discovered daily in common dependencies',
+                    'Manual dependency updates are tedious and error-prone',
+                    'Security compliance requires timely remediation',
+                    'Version upgrades can introduce breaking changes'
+                ],
+                outcome: 'Weekly automated scans detect vulnerabilities and generate PRs with dependency updates, including compatibility testing and migration guides for breaking changes.',
+                steps: [
+                    { title: 'Schedule Weekly Scan', desc: 'Create scheduled automation that runs every Monday at 9 AM' },
+                    { title: 'Configure Scanning', desc: 'Integrate with npm audit, Snyk, or Dependabot alerts' },
+                    { title: 'Define Fix Strategy', desc: 'Specify approach: patch only, minor versions, or major with migration' },
+                    { title: 'Test & PR Creation', desc: 'Agent runs tests, documents changes, creates PR' }
+                ],
+                code: `# Weekly Vulnerability Scan Automation
+
+schedule:
+  cron: "0 9 * * 1"  # Every Monday 9 AM
+
+agent:
+  name: security-scanner
+  task: |
+    1. Run npm audit / pip-audit / cargo audit
+    2. Parse CVE results and severity levels
+    3. For each HIGH/CRITICAL vulnerability:
+       - Research fix version
+       - Update dependency
+       - Run test suite
+       - Document breaking changes
+    4. Create PR with:
+       - Summary of fixed CVEs
+       - Risk assessment
+       - Test results
+       - Migration notes if needed
+    5. Notify #security-alerts channel`
+            },
+            {
+                id: 'release-notes',
+                phase: 'release',
+                icon: '📢',
+                title: 'Generate Release Notes',
+                description: 'Automatically compile release notes from merged PRs, categorizing changes and highlighting breaking changes.',
+                context: 'When preparing a release, someone needs to compile all changes since the last release into a coherent changelog. This involves reviewing merged PRs and writing user-friendly descriptions.',
+                motivation: [
+                    'Release notes are essential for users',
+                    'Manually compiling changes is tedious',
+                    'Breaking changes need clear migration guidance',
+                    'Consistent formatting improves readability'
+                ],
+                outcome: 'When a version tag is pushed, release notes are automatically generated from merged PRs, categorized by type, with highlighted breaking changes and migration instructions.',
+                steps: [
+                    { title: 'Trigger on Tag Push', desc: 'Set up automation when a version tag (v*) is pushed' },
+                    { title: 'Analyze Git History', desc: 'Agent reviews all commits and PRs since previous tag' },
+                    { title: 'Categorize Changes', desc: 'Group into: Breaking, Features, Fixes, Performance, Docs' },
+                    { title: 'Create GitHub Release', desc: 'Publish formatted release notes to GitHub Releases' }
+                ],
+                code: `# Generated Release Notes Example
+
+# v2.5.0 Release Notes
+
+## ⚠️ Breaking Changes
+- **API:** Renamed \`/users/list\` to \`/users\` (#234)
+  Migration: Update all API calls to new endpoint
+
+## ✨ Features
+- Add dark mode support (#256)
+- Implement webhook notifications (#248)
+- New dashboard analytics view (#241)
+
+## 🐛 Bug Fixes
+- Fix memory leak in WebSocket handler (#253)
+- Resolve timezone display issues (#249)
+
+## ⚡ Performance
+- Optimize database queries, 40% faster (#251)
+
+## 📚 Documentation
+- Updated API reference (#255)
+
+Full Changelog: v2.4.0...v2.5.0`
+            }
+        ];
+
+        let currentPhase = 'all';
+        let currentJob = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            renderJobs('all');
+        });
+
+        function selectPhase(phase) {
+            currentPhase = phase;
+            
+            // Update active state in SDLC process
+            document.querySelectorAll('.sdlc-step').forEach(step => {
+                step.classList.remove('active');
+                if (step.dataset.phase === phase) {
+                    step.classList.add('active');
+                }
+            });
+
+            renderJobs(phase);
+        }
+
+        function renderJobs(phase) {
+            const filteredJobs = phase === 'all' 
+                ? jobs 
+                : jobs.filter(job => job.phase === phase);
+
+            const jobsList = document.getElementById('jobsList');
+            const jobsTitle = document.getElementById('jobsTitle');
+            const phaseBadge = document.getElementById('phaseBadge');
+
+            // Update title
+            if (phase === 'all') {
+                jobsTitle.textContent = 'All Jobs';
+                phaseBadge.style.display = 'none';
+            } else {
+                const phaseNames = {
+                    feedback: 'Feedback',
+                    planning: 'Planning',
+                    design: 'Design',
+                    coding: 'Coding',
+                    testing: 'Testing',
+                    release: 'Release'
+                };
+                jobsTitle.textContent = `${phaseNames[phase]} Jobs`;
+                phaseBadge.className = `phase-badge ${phase}`;
+                phaseBadge.textContent = phaseNames[phase];
+                phaseBadge.style.display = 'inline-flex';
+            }
+
+            // Render jobs
+            if (filteredJobs.length === 0) {
+                jobsList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <p>No jobs available for this phase yet.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            jobsList.innerHTML = filteredJobs.map(job => `
+                <div class="job-item" data-phase="${job.phase}" data-job="${job.id}" onclick="openPanel('${job.id}')">
+                    <div class="job-item-header">
+                        <div class="job-icon">${job.icon}</div>
+                        <div class="job-item-content">
+                            <div class="job-item-title">${job.title}</div>
+                            <p class="job-item-description">${job.description}</p>
+                        </div>
+                        <div class="job-item-arrow">→</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openPanel(jobId) {
+            const job = jobs.find(j => j.id === jobId);
+            if (!job) return;
+
+            currentJob = job;
+
+            // Update active state on job items
+            document.querySelectorAll('.job-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.job === jobId) {
+                    item.classList.add('active');
+                }
+            });
+
+            const phaseNames = {
+                feedback: 'Feedback',
+                planning: 'Planning',
+                design: 'Design',
+                coding: 'Coding',
+                testing: 'Testing',
+                release: 'Release'
+            };
+
+            // Update panel header
+            document.getElementById('panelPhase').innerHTML = `
+                <span class="phase-badge ${job.phase}">${phaseNames[job.phase]}</span>
+            `;
+            document.getElementById('panelTitle').innerHTML = `
+                <span>${job.icon}</span> ${job.title}
+            `;
+
+            // Update panel body
+            document.getElementById('panelBody').innerHTML = `
+                <div class="panel-section">
+                    <div class="panel-section-title">Context</div>
+                    <div class="panel-section-content">
+                        <p>${job.context}</p>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="panel-section-title">Motivation</div>
+                    <div class="panel-section-content">
+                        <ul>
+                            ${job.motivation.map(m => `<li>${m}</li>`).join('')}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="panel-section-title">Desired Outcome</div>
+                    <div class="panel-section-content">
+                        <div class="outcome-box">
+                            <p>${job.outcome}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="panel-section-title">How to Configure in Agent Canvas</div>
+                    <div class="panel-section-content">
+                        <div class="config-steps">
+                            ${job.steps.map((step, i) => `
+                                <div class="config-step">
+                                    <div class="step-number">${i + 1}</div>
+                                    <div class="step-content">
+                                        <h4>${step.title}</h4>
+                                        <p>${step.desc}</p>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <div class="panel-section-title">Example Configuration</div>
+                    <div class="panel-section-content">
+                        <div class="code-block">
+                            <pre>${escapeHtml(job.code)}</pre>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Open panel
+            document.getElementById('sidePanel').classList.add('open');
+            document.getElementById('panelOverlay').classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closePanel() {
+            document.getElementById('sidePanel').classList.remove('open');
+            document.getElementById('panelOverlay').classList.remove('open');
+            document.body.style.overflow = '';
+            
+            // Remove active state from job items
+            document.querySelectorAll('.job-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            currentJob = null;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Close panel on escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closePanel();
+            }
+        });
+    </script>
+</body>
+</html>
